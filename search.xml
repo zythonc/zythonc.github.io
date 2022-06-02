@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>集合幂级数胡乱攻略(更新中)</title>
+      <title>集合幂级数胡乱攻略</title>
       <link href="/2022/06/02/%E9%9B%86%E5%90%88%E5%B9%82%E7%BA%A7%E6%95%B0%E8%83%A1%E4%B9%B1%E6%94%BB%E7%95%A5/"/>
       <url>/2022/06/02/%E9%9B%86%E5%90%88%E5%B9%82%E7%BA%A7%E6%95%B0%E8%83%A1%E4%B9%B1%E6%94%BB%E7%95%A5/</url>
       
@@ -27,7 +27,7 @@
       <link href="/2022/06/01/hello-world/"/>
       <url>/2022/06/01/hello-world/</url>
       
-        <content type="html"><![CDATA[<p>之前说一定要把 page 搞完，于是填坑</p><p>Test：$\sqrt{a^2+b^2}$</p><script type="math/tex; mode=display">\begin{aligned}c_k&=\sum_{p+q\equiv k} a_pb_q\\&=\sum_p\sum_qa_pb_q\dfrac 1 n\sum_{i=0}^{n-1}\omega_{n}^{ip+iq-ik}\\&=\dfrac1{n}\sum_{i=0}^{n-1}\omega_n^{-ik}\sum_pa_p\omega_n^{ip}\sum_{q}b_q\omega_n^{iq}\end{aligned}</script>]]></content>
+        <content type="html"><![CDATA[<p>之前说一定要把 page 搞完，于是填坑</p><p>Test：$\sqrt{a^2+b^2}$</p>]]></content>
       
       
       
