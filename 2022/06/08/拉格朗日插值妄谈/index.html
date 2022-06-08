@@ -82,11 +82,13 @@ f(n)=\sum_{i=1}^k (-1)^{k-i}y_i\frac{(n-1)^{\underline{i-1}}(n-k)^{\overline{k-i
 <p>当插值点增加或减少一个时，如果重新计算整个式子就会有很多地方被重复计算了，此时我们需要利用重心拉格朗日插值法</p>
 <p>对原式的每个 $i$ 乘以 $n-x_i$，设 $g(x)=\prod x-x_i$，那么就有：</p>
 <script type="math/tex; mode=display">
-f(x)=g(x)\sum_{i=1}^k\dfrac{y_i}{k-x_i}\prod_{j\neq i}\dfrac1{x_i-x_j}</script><p>将后面的 $\prod$ 部分设为 $t_i$，整个式子就可以在 $O(n)$ 内维护。只要不将插值点的横坐标直接代入，那么这个式子总是有定义的</p>
+f(x)=g(x)\sum_{i=1}^k\frac{y_i}{k-x_i}\prod_{j\neq i}\frac1{x_i-x_j}</script><p>将后面的 $\prod$ 部分设为 $t_i$，整个式子就可以在 $O(n)$ 内维护。只要不将插值点的横坐标直接代入，那么这个式子总是有定义的</p>
 <p>自然数幂和太经典这里不放了（</p>
 <h3 id="LG-3270-成绩比较"><a href="#LG-3270-成绩比较" class="headerlink" title="LG. 3270 成绩比较"></a>LG. 3270 成绩比较</h3><p>首先设 $f_k$ 为包含钦定的 $k$ 个人的方案和（钦定 $k$ 个被碾压），很显然有：</p>
 <script type="math/tex; mode=display">
-f_k=\dbinom{n-1}{k}\prod_{i=1}^m\dbinom{n-k-1}{r_i-1}\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}</script><p>将后边的式子变变形：</p>
+\begin{aligned}
+f_k=\dbinom{n-1}{k}\prod_{i=1}^m\dbinom{n-k-1}{r_i-1}\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}
+\end{aligned}</script><p>将后边的式子变变形：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}&=\sum_{j=1}^{u_i}\sum_{p=1}^{r_i-1}\binom{r_i-1}{p}u_i^p(-j)^{n-1-p}
