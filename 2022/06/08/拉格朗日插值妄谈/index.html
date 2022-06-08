@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>拉格朗日插值妄谈 | こはるびより</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$
+我们可以构造 $k$ 个多项式，满足 $f_i(x)$ 仅在 $x_i$ 处有值，且值为 $y_i$
+事实上这样的式子是很容易找到的，取：
+
+f_i(x)=\prod\limits_{j\neq i}\dfrac{x-x">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="拉格朗日插值妄谈"/>
+  <meta property="og:site_name" content="こはるびより"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="こはるびより" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">こはるびより</a><span class="split"></span><span class="title">拉格朗日插值妄谈</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-08</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <p>对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$</p>
+<p>我们可以构造 $k$ 个多项式，满足 $f_i(x)$ 仅在 $x_i$ 处有值，且值为 $y_i$</p>
+<p>事实上这样的式子是很容易找到的，取：</p>
+<script type="math/tex; mode=display">
+f_i(x)=\prod\limits_{j\neq i}\dfrac{x-x_j}{x_i-x_j}</script><p>就可以啦，那么整个插值的表达式即为：</p>
+<script type="math/tex; mode=display">
+f(n)=\sum_{i=1}^ky_i\prod_{j\neq i}\dfrac{n-x_j}{x_i-x_j}</script><p>当点值可以任意选择时，我们通常选择 $1\sim k$，然后上式变为：</p>
+<script type="math/tex; mode=display">
+f(n)=\sum_{i=1}^k (-1)^{k-i}y_i\dfrac{(n-1)^{\underline{i-1}}(n-k)^{\overline{k-i}}}{(i-1)!(k-i)!}</script><p>就可以 $O(n)$ 计算啦</p>
+<p>当插值点增加或减少一个时，如果重新计算整个式子就会有很多地方被重复计算了，此时我们需要利用重心拉格朗日插值法</p>
+<p>对原式的每个 $i$ 乘以 $n-x_i$，设 $g(x)=\prod x-x_i$，那么就有：</p>
+<script type="math/tex; mode=display">
+f(x)=g(x)\sum_{i=1}^k\dfrac{y_i}{k-x_i}\prod_{j\neq i}\dfrac1{x_i-x_j}</script><p>将后面的 $\prod$ 部分设为 $t_i$，整个式子就可以在 $O(n)$ 内维护。只要不将插值点的横坐标直接代入，那么这个式子总是有定义的</p>
+<p>自然数幂和太经典这里不放了（</p>
+<h3 id="LG-3270-成绩比较"><a href="#LG-3270-成绩比较" class="headerlink" title="LG. 3270 成绩比较"></a>LG. 3270 成绩比较</h3><p>首先设 $f_k$ 为包含钦定的 $k$ 个人的方案和（钦定 $k$ 个被碾压），很显然有：</p>
+<script type="math/tex; mode=display">
+f_k=\binom{n-1}{k}\prod_{i=1}^m\binom{n-k-1}{r_i-1}\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}</script><p>将后边的式子变变形：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}&=\sum_{j=1}^{u_i}\sum_{p=1}^{r_i-1}\binom{r_i-1}{p}u_i^p(-j)^{n-1-p}
+\\
+&=\sum_{p=1}^{r_i-1}u_i^p\binom{r_i-1}{p}(-1)^{r_i-1-p}\sum_{j=1}^{u_i}j^{n-1-p}
+\end{aligned}</script><p>最后边的东西显然是一个自然数幂和，于是预处理一下自然数幂和这个 $f_i$ 就算完啦</p>
+<p>现在根据二项式反演，设 $g_i$ 为恰好碾压 $i$ 个人的答案，那么就有：</p>
+<script type="math/tex; mode=display">
+f_k=\sum_{i=k}^n\binom{i}k g_i\Leftrightarrow g_k=\sum_{i=k}^n(-1)^{i-k}\binom{i}kf_i</script><p>随便写写就行了</p>
+<h3 id="BZOJ-3453-XLkxc"><a href="#BZOJ-3453-XLkxc" class="headerlink" title="BZOJ. 3453 XLkxc"></a>BZOJ. 3453 XLkxc</h3><p>代码好写的小清新题</p>
+<p>如果 $f(x)$ 是一个 $k$ 次多项式，那么 $g(x)=\sum f(x)=\sum (ax^k+\cdots c)$ 通过自然数幂和我们可以知道这是一个 $k+1$ 次的多项式</p>
+<p>于是原式即为一个 $k+3$ 次的多项式，对第一个部分求点值，然后插第一部分得到第二部分的点值，之后插第二个部分得到第三个部分的点值，最后插第三部分的点值求出答案即可</p>
+<p>然后乱写写一遍就过了</p>
+<h3 id="LG-4463-calc"><a href="#LG-4463-calc" class="headerlink" title="LG. 4463 calc"></a>LG. 4463 calc</h3><p>某谷水评一直可以的</p>
+<p>首先一眼动态规划：$dp_{n,m}=mdp_{n-1,m-1}+dp_{n,m-1}$</p>
+<p>将上面的动态规划式子展开来看就是</p>
+<script type="math/tex; mode=display">
+dp_{n,m}=m\sum_{i=1}^{m-1}dp_{n-1,i}</script><p>考虑 $f(x)=dp_{1,x}$，它是一个一次多项式的前缀和，也就是一个二次多项式</p>
+<p>递推着去考虑，每次相当于对一个 $k$ 次多项式做前缀和，然后乘以一个不定元 $x$</p>
+<p>根据自然数幂和的结论，我们就可以推断出 $dp_{n,x}$ 是一个 $2n$ 次多项式，于是直接拉格朗日插值即可</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>
