@@ -6,11 +6,14 @@
   <title>拉格朗日插值妄谈 | こはるびより</title>
   <meta name="author" content="zythonc">
   
-  <meta name="description" content="对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$
+  <meta name="description" content="今日热搜榜
+我就是歌姬吧，乱搞一些稀奇古怪的东西肯定没好果汁吃
+
+对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$
 我们可以构造 $k$ 个多项式，满足 $f_i(x)$ 仅在 $x_i$ 处有值，且值为 $y_i$
 事实上这样的式子是很容易找到的，取：
 
-f_i(x)=\prod\limits_{j\neq i}\dfrac{x-x">
+f_i(x)">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,15 +67,18 @@ MathJax.Hub.Config({
 	  
 
 	  <!-- content -->
-	  <p>对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$</p>
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>我就是歌姬吧，乱搞一些稀奇古怪的东西肯定没好果汁吃</li>
+</ul>
+<p>对于一个多项式函数 $f(x)$ 给定 $k$ 个点值，然后要求 $f(n)$</p>
 <p>我们可以构造 $k$ 个多项式，满足 $f_i(x)$ 仅在 $x_i$ 处有值，且值为 $y_i$</p>
 <p>事实上这样的式子是很容易找到的，取：</p>
 <script type="math/tex; mode=display">
-f_i(x)=\prod\limits_{j\neq i}\dfrac{x-x_j}{x_i-x_j}</script><p>就可以啦，那么整个插值的表达式即为：</p>
+f_i(x)=\prod\limits_{j\neq i}\frac{x-x_j}{x_i-x_j}</script><p>就可以啦，那么整个插值的表达式即为：</p>
 <script type="math/tex; mode=display">
-f(n)=\sum_{i=1}^ky_i\prod_{j\neq i}\dfrac{n-x_j}{x_i-x_j}</script><p>当点值可以任意选择时，我们通常选择 $1\sim k$，然后上式变为：</p>
+f(n)=\sum_{i=1}^ky_i\prod_{j\neq i}\frac{n-x_j}{x_i-x_j}</script><p>当点值可以任意选择时，我们通常选择 $1\sim k$，然后上式变为：</p>
 <script type="math/tex; mode=display">
-f(n)=\sum_{i=1}^k (-1)^{k-i}y_i\dfrac{(n-1)^{\underline{i-1}}(n-k)^{\overline{k-i}}}{(i-1)!(k-i)!}</script><p>就可以 $O(n)$ 计算啦</p>
+f(n)=\sum_{i=1}^k (-1)^{k-i}y_i\frac{(n-1)^{\underline{i-1}}(n-k)^{\overline{k-i}}}{(i-1)!(k-i)!}</script><p>就可以 $O(n)$ 计算啦</p>
 <p>当插值点增加或减少一个时，如果重新计算整个式子就会有很多地方被重复计算了，此时我们需要利用重心拉格朗日插值法</p>
 <p>对原式的每个 $i$ 乘以 $n-x_i$，设 $g(x)=\prod x-x_i$，那么就有：</p>
 <script type="math/tex; mode=display">
@@ -80,7 +86,7 @@ f(x)=g(x)\sum_{i=1}^k\dfrac{y_i}{k-x_i}\prod_{j\neq i}\dfrac1{x_i-x_j}</script><
 <p>自然数幂和太经典这里不放了（</p>
 <h3 id="LG-3270-成绩比较"><a href="#LG-3270-成绩比较" class="headerlink" title="LG. 3270 成绩比较"></a>LG. 3270 成绩比较</h3><p>首先设 $f_k$ 为包含钦定的 $k$ 个人的方案和（钦定 $k$ 个被碾压），很显然有：</p>
 <script type="math/tex; mode=display">
-f_k=\binom{n-1}{k}\prod_{i=1}^m\binom{n-k-1}{r_i-1}\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}</script><p>将后边的式子变变形：</p>
+f_k=\dbinom{n-1}{k}\prod_{i=1}^m\dbinom{n-k-1}{r_i-1}\sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}</script><p>将后边的式子变变形：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \sum_{j=1}^{u_i}(u_i-j)^{r_i-1}j^{n-r_i}&=\sum_{j=1}^{u_i}\sum_{p=1}^{r_i-1}\binom{r_i-1}{p}u_i^p(-j)^{n-1-p}
