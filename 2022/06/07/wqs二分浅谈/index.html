@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>wqs二分浅谈 | こはるびより</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="今日热搜榜
+左右左右左右左右摇摆
+
+遇到“恰好选择 $k$ 个”的问题时，如果原问题（不限选择几个只要求最优化）具有凸性，那么可尝试使用 wqs 二分进行优化
+设选择 $i$ 个时的答案为 $f_i$，将有所有点放在二维平面上就构成了一个凸包，每次对特定的物品尝试定义一个惩罚值 $k$，即每次选择一">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="wqs二分浅谈"/>
+  <meta property="og:site_name" content="こはるびより"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="こはるびより" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">こはるびより</a><span class="split"></span><span class="title">wqs二分浅谈</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-07</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>左右左右左右左右摇摆</li>
+</ul>
+<p>遇到“恰好选择 $k$ 个”的问题时，如果原问题（不限选择几个只要求最优化）具有凸性，那么可尝试使用 wqs 二分进行优化</p>
+<p>设选择 $i$ 个时的答案为 $f_i$，将有所有点放在二维平面上就构成了一个凸包，每次对特定的物品尝试定义一个惩罚值 $k$，即每次选择一个特定物品时都要额外付出 $k$ 的代价。我们原问题的算法能做的就是最小化 $f_i-kx$ 并得到 $x$</p>
+<p>当 $k&gt;0$ 的时候，相当于给每个特定物品减掉 $k$，反之亦然。将其看成直线，发现每次就相当于二分斜率然后得到最小的截距以及对应的点的横坐标</p>
+<h3 id="LG-2619-Tree"><a href="#LG-2619-Tree" class="headerlink" title="LG. 2619 Tree"></a>LG. 2619 Tree</h3><p>二分一个惩罚值然后给每条白边加上这个惩罚值，不断逼近 $need$ 即可</p>
+<p>这里有一个问题，如果我们使用整数二分，那么可能对于一个 $mid$ 得到一个 $cnt&gt;need$，但是对于 $mid+1$ 得到一个 $cnt&lt;need$</p>
+<p>考虑这种情况出现的原因，设选择的边集的最大权值为 $w$（白边加上惩罚值），有两种情况：</p>
+<ul>
+<li>存在一些等于 $w$ 的白边一些等于 $w$ 的黑边，原来先选择的是黑边，然后 $mid+1$ 变成 $mid$ 之后选上了这些白边</li>
+<li>存在一些等于 $w+1$ 的白边，$mid+1$ 变成 $mid$ 之后选上了这些白边</li>
+</ul>
+<p>此时如果我们规定优先选择白边，那么就只剩第二种情况。不难发现此时一定可以将一些白边替换成黑边，因此这种情况就是我们需要的答案</p>
+<h3 id="LG-4383-林克卡特树"><a href="#LG-4383-林克卡特树" class="headerlink" title="LG. 4383 林克卡特树"></a>LG. 4383 林克卡特树</h3><p>显然相当于从树上选取 $k+1$ 条链，使得这 $k+1$ 条链的权值和最大</p>
+<p>首先如果只是最大化收益的话，其选取的链的条数不确定，而我们需要的是恰好 $k$ 条链的答案，我们不妨设 $(x,f_x)$ 为恰好选取了 $x$ 条链的答案</p>
+<p>加上惩罚值后，我们期望的效果是从链的权值从小往大去放弃链，于是我们应该对一整条链加上惩罚值而不是每条边都加上惩罚值</p>
+<p>此时我们需要在最大化权值的情况下选取尽可能多的链，而这是一个简单的工作，直接动态规划即可</p>
+<h3 id="LG-4983-忘情"><a href="#LG-4983-忘情" class="headerlink" title="LG. 4983 忘情"></a>LG. 4983 忘情</h3><p>此处讨论 wqs 二分部分</p>
+<p>发现当无惩罚值的时候会分成 $n$ 段，我们期望加上惩罚值之后会选择越来越少的段，于是二分的范围为 $[0,k)$，这个 $k$ 是你规定的值。贡献统计方式为每个段会额外多出 $k$ 的贡献，最小化贡献和</p>
+<p>这是一个经典的 wqs 二分形式，外层 wqs 二分，内层斜率优化即可</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>

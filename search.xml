@@ -4,6 +4,44 @@
   
     
     <entry>
+      <title>wqs二分浅谈</title>
+      <link href="/2022/06/07/wqs%E4%BA%8C%E5%88%86%E6%B5%85%E8%B0%88/"/>
+      <url>/2022/06/07/wqs%E4%BA%8C%E5%88%86%E6%B5%85%E8%B0%88/</url>
+      
+        <content type="html"><![CDATA[<h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul><li>左右左右左右左右摇摆</li></ul><p>遇到“恰好选择 $k$ 个”的问题时，如果原问题（不限选择几个只要求最优化）具有凸性，那么可尝试使用 wqs 二分进行优化</p><p>设选择 $i$ 个时的答案为 $f_i$，将有所有点放在二维平面上就构成了一个凸包，每次对特定的物品尝试定义一个惩罚值 $k$，即每次选择一个特定物品时都要额外付出 $k$ 的代价。我们原问题的算法能做的就是最小化 $f_i-kx$ 并得到 $x$</p><p>当 $k&gt;0$ 的时候，相当于给每个特定物品减掉 $k$，反之亦然。将其看成直线，发现每次就相当于二分斜率然后得到最小的截距以及对应的点的横坐标</p><h3 id="LG-2619-Tree"><a href="#LG-2619-Tree" class="headerlink" title="LG. 2619 Tree"></a>LG. 2619 Tree</h3><p>二分一个惩罚值然后给每条白边加上这个惩罚值，不断逼近 $need$ 即可</p><p>这里有一个问题，如果我们使用整数二分，那么可能对于一个 $mid$ 得到一个 $cnt&gt;need$，但是对于 $mid+1$ 得到一个 $cnt&lt;need$</p><p>考虑这种情况出现的原因，设选择的边集的最大权值为 $w$（白边加上惩罚值），有两种情况：</p><ul><li>存在一些等于 $w$ 的白边一些等于 $w$ 的黑边，原来先选择的是黑边，然后 $mid+1$ 变成 $mid$ 之后选上了这些白边</li><li>存在一些等于 $w+1$ 的白边，$mid+1$ 变成 $mid$ 之后选上了这些白边</li></ul><p>此时如果我们规定优先选择白边，那么就只剩第二种情况。不难发现此时一定可以将一些白边替换成黑边，因此这种情况就是我们需要的答案</p><h3 id="LG-4383-林克卡特树"><a href="#LG-4383-林克卡特树" class="headerlink" title="LG. 4383 林克卡特树"></a>LG. 4383 林克卡特树</h3><p>显然相当于从树上选取 $k+1$ 条链，使得这 $k+1$ 条链的权值和最大</p><p>首先如果只是最大化收益的话，其选取的链的条数不确定，而我们需要的是恰好 $k$ 条链的答案，我们不妨设 $(x,f_x)$ 为恰好选取了 $x$ 条链的答案</p><p>加上惩罚值后，我们期望的效果是从链的权值从小往大去放弃链，于是我们应该对一整条链加上惩罚值而不是每条边都加上惩罚值</p><p>此时我们需要在最大化权值的情况下选取尽可能多的链，而这是一个简单的工作，直接动态规划即可</p><h3 id="LG-4983-忘情"><a href="#LG-4983-忘情" class="headerlink" title="LG. 4983 忘情"></a>LG. 4983 忘情</h3><p>此处讨论 wqs 二分部分</p><p>发现当无惩罚值的时候会分成 $n$ 段，我们期望加上惩罚值之后会选择越来越少的段，于是二分的范围为 $[0,k)$，这个 $k$ 是你规定的值。贡献统计方式为每个段会额外多出 $k$ 的贡献，最小化贡献和</p><p>这是一个经典的 wqs 二分形式，外层 wqs 二分，内层斜率优化即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> wqs二分 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>DP优化乱写</title>
+      <link href="/2022/06/06/DP%E4%BC%98%E5%8C%96%E4%B9%B1%E5%86%99/"/>
+      <url>/2022/06/06/DP%E4%BC%98%E5%8C%96%E4%B9%B1%E5%86%99/</url>
+      
+        <content type="html"><![CDATA[<h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul><li>某机构的耍流氓行为让某人对其非常厌恶</li></ul><h2 id="决策单调性优化-DP"><a href="#决策单调性优化-DP" class="headerlink" title="决策单调性优化 DP"></a>决策单调性优化 DP</h2><p>定义 $w_{x,y}$ 是整数集合上的二元函数，如果对于任意 $a\le b\le c\le d$，都有 $w_{a,d}+w_{b,c}\ge w_{a,c}+w_{b,d}$，那么称这个函数满足四边形不等式</p><p>一个等价的定义是对于任意 $a&lt;b$，都有 $w_{a,b+1}+w_{a+1,b}\ge w_{a,b}+w_{a+1,b+1}$</p><p>对于 $a+1&lt;c$，有：</p><script type="math/tex; mode=display">\begin{aligned}&\begin{cases}w_{a,c+1}+w_{a+1,c}\ge w_{a,c}+w_{a+1,c+1}\\w_{a+1,c+1}+w_{a+2,c}\ge w_{a+2,c+1}+w_{a+1,c}\end{cases}\\\\\Rightarrow\;&w_{a,c+1}+w_{a+2,c}\ge w_{a,c}+w_{a+2,c+1}\end{aligned}</script><p>而当 $a=c$ 的时候的情况是平凡的，于是我们就得出对于 $a\le b\le c$，有：$w_{a,c+1}+w_{b,c}\ge w_{a,c}+w_{b,c+1}$</p><p>继续对 $c+1$ 扩展至 $c+2$，以此类推，我们就证得 $a\le b\le c\le d$ 的情况啦</p><p>对于形如 $f_i=\min(f_j+w_{j,i})$ 的转移方程，如果 $w$ 满足四边形不等式，则 $f$ 就具有决策单调性</p><p>现在我们尝试证明它，首先设 $p_i$ 为 $f_i$ 的决策点，那么对于 $j\le p_i$，有 $f_{p_i}+w_{p_i,i}\le f_j+w_{j,i}$</p><p>我们要讨论的是 $\forall i^\prime&gt;i,f_{p_i}+w_{p_i,i^\prime}$ 与 $f_j+w_{j,i^\prime}$ 的关系</p><p>那么尝试将 $w$ 提取出来，因为有四个点 $j&lt; p_i&lt; i&lt;i^\prime$，将其按照四边形不等式的形式排列：</p><script type="math/tex; mode=display">\begin{aligned}&w_{p_i,i^\prime}+w_{j,i}\le w_{p_i,i}+w_{j,i^\prime}\\\Rightarrow\;&w_{p_i,i^\prime}-w_{p_i,i}\le w_{j,i^\prime}-w_{j,i}\\\Rightarrow\;&(f_{p_i}+w_{p_i,i})+(w_{p_i,i^\prime}-w_{p_i,i})\le (f_j+w_{j,i})+(w_{j,i^\prime}-w_{j,i})\\\Rightarrow\;&f_{p_i}+w_{p_i,i^\prime}\le f_j+w_{j,i^\prime}\end{aligned}</script><p>于是决策单调性也证完啦</p><p>在维护的时候，我们只需要用一个队列来保存三元组 $(p,l,r)$，表示 $l,r$ 这段区间内使用 $p$ 作为决策点</p><p>从小到大枚举决策点 $i$，从队列尾部向前查找第一个用 $i$ 为决策点更优的位置，然后更新队列。查找时使用二分即可</p><h3 id="LG-4072-征途"><a href="#LG-4072-征途" class="headerlink" title="LG. 4072 征途"></a>LG. 4072 征途</h3><script type="math/tex; mode=display">\begin{aligned}m\sum_{i=1}^m(x_i-\bar x)^2&=m\sum_{i=1}^m(x_i^2-2x_i\dfrac{s}{m})+m^2\left(\dfrac{s}{m}\right)^2\\&=m\sum_{i=1}^mx_i^2-2s^2+s^2\\&=m\sum_{i=1}^mx_i^2-s^2\end{aligned}</script><p>其中 $s$ 表示道路长度总和，此时我们要做的就是最小化 $\sum x_i^2$</p><p>设 $f_{i,j}$ 表示前 $j$ 条路分成了 $i$ 份的最小平方和。决策单调性是显然的，外层枚举 $i$，内层转移利用决策单调性优化，总复杂度 $O(n^2\log n)$</p><h3 id="LG-2900-Land-Acquisition-G"><a href="#LG-2900-Land-Acquisition-G" class="headerlink" title="LG. 2900 Land Acquisition G"></a>LG. 2900 Land Acquisition G</h3><p>如果对于两个土地 $i,j$ 满足 $h_i\le h_j,w_i\le w_j$，那么土地 $i$ 一定是不用考虑的。将所有无用土地取出，剩下的按照 $h_i$ 从大到小排序</p><p>此时设 $f_i$ 为购买前 $i$ 块土地所需要的最小花费，显然有 $f_i=\min(f_j+h_{j+1}w_i)$</p><p>对于 $v_{x,y}=h_xw_y$，有：</p><ul><li>$v_{x,y+1}+v_{x+1,y}=h_xw_{y+1}+h_{x+1}w_y$</li><li>$v_{x,y}+v_{x+1,y+1}=h_{x}w_y+h_{x+1}w_{y+1}$</li></ul><p>两式相减得到 $h_x(w_{y+1}-w_y)+h_{x+1}(w_y-w_{y+1})$，因为 $h_x&gt;h_{x+1}$ 所以 $v$ 满足四边形不等式，利用决策单调性优化即可</p><h2 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h2><p>对于 $f_i=\min (f_j+au_i+bv_j+cu_iv_j+C)$，其中 $u_i$ 为与且仅与 $i$ 相关的单项式，$v_j$ 同理。多项式同理讨论即可</p><p>将其转换为 $f_j=-(b+cu_i)v_j+f_i-au_i-C$，此时每个点可以表示为 $(v_j,f_j)$，每次转移就是用一条斜率为 $-(b+cu_i)$ 的直线去碰一个可以获得最小截距的点</p><p>发现这样的点在凸包上，如果 $u_i$ 具有单调性那么每次转移的使用的直线的斜率具有单调性，用队列维护即可；如果没有那么需要在凸包上二分</p><p>如果 $v_i$ 具有单调性，那么每次都是在凸包最后加入一个点，直接更新即可。否则需要利用平衡树等动态维护凸包</p><h3 id="LG-4983-忘情"><a href="#LG-4983-忘情" class="headerlink" title="LG. 4983 忘情"></a>LG. 4983 忘情</h3><p>此处讨论斜率优化部分</p><p>首先化简原式，可以将问题转化为当每段的值为 $(1+\sum x_i)^2$ 时，最优划分所划分出的序列的值的和</p><p>记 $p_i$ 为前 $i$ 个数的和，显然有 $f_i=\min(f_j+(p_i-p_j+1)^2)$，将其拆开：</p><script type="math/tex; mode=display">f_i=f_j+p_i^2+p_j^2-2p_ip_j+2p_i-2p_j+1</script><p>将其写成斜率优化的形式就是：</p><script type="math/tex; mode=display">f_j+p_j^2=(2p_i+2)p_j+f_i-p_i^2-2p_i-1</script><p>发现斜率与点的横坐标都递增，这是一个经典的斜率优化的形式，此时将每个点设为 $(p_j,f_j+p_j^2)$，直接斜率优化即可</p><h3 id="LG-4360-锯木厂选址"><a href="#LG-4360-锯木厂选址" class="headerlink" title="LG. 4360 锯木厂选址"></a>LG. 4360 锯木厂选址</h3><p>显然有：$f_i=\min(p_j-c_js_j+(p_i-p_j)-(c_i-c_j)s_i+p_n-p_i)$</p><p>其中 $c_i$ 表示前 $i$ 棵树的重量和，$s_i$ 表示从第 $i$ 棵树走到山底的距离，$p_i$ 表示前 $i$ 棵树统一运到山脚的花费</p><p>写成斜率优化的形式就是：</p><script type="math/tex; mode=display">c_js_j=p_i-f_i+s_ic_j-s_ic_i+p_n-p_i</script><p>每个点为 $(c_i,c_is_i)$，用斜率为 $s_i$ 的直线碰凸包即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> DP优化 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>计算几何乱谈</title>
       <link href="/2022/06/05/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E4%B9%B1%E8%B0%88/"/>
       <url>/2022/06/05/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E4%B9%B1%E8%B0%88/</url>

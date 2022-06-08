@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>DP优化乱写 | こはるびより</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="今日热搜榜
+某机构的耍流氓行为让某人对其非常厌恶
+
+决策单调性优化 DP定义 $w_{x,y}$ 是整数集合上的二元函数，如果对于任意 $a\le b\le c\le d$，都有 $w_{a,d}+w_{b,c}\ge w_{a,c}+w_{b,d}$，那么称这个函数满足四边形不等式
+一个等价的定义">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="DP优化乱写"/>
+  <meta property="og:site_name" content="こはるびより"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="こはるびより" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">こはるびより</a><span class="split"></span><span class="title">DP优化乱写</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-06</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>某机构的耍流氓行为让某人对其非常厌恶</li>
+</ul>
+<h2 id="决策单调性优化-DP"><a href="#决策单调性优化-DP" class="headerlink" title="决策单调性优化 DP"></a>决策单调性优化 DP</h2><p>定义 $w_{x,y}$ 是整数集合上的二元函数，如果对于任意 $a\le b\le c\le d$，都有 $w_{a,d}+w_{b,c}\ge w_{a,c}+w_{b,d}$，那么称这个函数满足四边形不等式</p>
+<p>一个等价的定义是对于任意 $a&lt;b$，都有 $w_{a,b+1}+w_{a+1,b}\ge w_{a,b}+w_{a+1,b+1}$</p>
+<p>对于 $a+1&lt;c$，有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\begin{cases}
+w_{a,c+1}+w_{a+1,c}\ge w_{a,c}+w_{a+1,c+1}
+\\
+w_{a+1,c+1}+w_{a+2,c}\ge w_{a+2,c+1}+w_{a+1,c}
+\end{cases}
+\\
+\\
+\Rightarrow\;&w_{a,c+1}+w_{a+2,c}\ge w_{a,c}+w_{a+2,c+1}
+\end{aligned}</script><p>而当 $a=c$ 的时候的情况是平凡的，于是我们就得出对于 $a\le b\le c$，有：$w_{a,c+1}+w_{b,c}\ge w_{a,c}+w_{b,c+1}$</p>
+<p>继续对 $c+1$ 扩展至 $c+2$，以此类推，我们就证得 $a\le b\le c\le d$ 的情况啦</p>
+<p>对于形如 $f_i=\min(f_j+w_{j,i})$ 的转移方程，如果 $w$ 满足四边形不等式，则 $f$ 就具有决策单调性</p>
+<p>现在我们尝试证明它，首先设 $p_i$ 为 $f_i$ 的决策点，那么对于 $j\le p_i$，有 $f_{p_i}+w_{p_i,i}\le f_j+w_{j,i}$</p>
+<p>我们要讨论的是 $\forall i^\prime&gt;i,f_{p_i}+w_{p_i,i^\prime}$ 与 $f_j+w_{j,i^\prime}$ 的关系</p>
+<p>那么尝试将 $w$ 提取出来，因为有四个点 $j&lt; p_i&lt; i&lt;i^\prime$，将其按照四边形不等式的形式排列：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&w_{p_i,i^\prime}+w_{j,i}\le w_{p_i,i}+w_{j,i^\prime}
+\\
+\Rightarrow\;&w_{p_i,i^\prime}-w_{p_i,i}\le w_{j,i^\prime}-w_{j,i}
+\\
+\Rightarrow\;&(f_{p_i}+w_{p_i,i})+(w_{p_i,i^\prime}-w_{p_i,i})\le (f_j+w_{j,i})+(w_{j,i^\prime}-w_{j,i})
+\\
+\Rightarrow\;&f_{p_i}+w_{p_i,i^\prime}\le f_j+w_{j,i^\prime}
+\end{aligned}</script><p>于是决策单调性也证完啦</p>
+<p>在维护的时候，我们只需要用一个队列来保存三元组 $(p,l,r)$，表示 $l,r$ 这段区间内使用 $p$ 作为决策点</p>
+<p>从小到大枚举决策点 $i$，从队列尾部向前查找第一个用 $i$ 为决策点更优的位置，然后更新队列。查找时使用二分即可</p>
+<h3 id="LG-4072-征途"><a href="#LG-4072-征途" class="headerlink" title="LG. 4072 征途"></a>LG. 4072 征途</h3><script type="math/tex; mode=display">
+\begin{aligned}
+m\sum_{i=1}^m(x_i-\bar x)^2&=m\sum_{i=1}^m(x_i^2-2x_i\dfrac{s}{m})+m^2\left(\dfrac{s}{m}\right)^2
+\\
+&=m\sum_{i=1}^mx_i^2-2s^2+s^2
+\\
+&=m\sum_{i=1}^mx_i^2-s^2
+\end{aligned}</script><p>其中 $s$ 表示道路长度总和，此时我们要做的就是最小化 $\sum x_i^2$</p>
+<p>设 $f_{i,j}$ 表示前 $j$ 条路分成了 $i$ 份的最小平方和。决策单调性是显然的，外层枚举 $i$，内层转移利用决策单调性优化，总复杂度 $O(n^2\log n)$</p>
+<h3 id="LG-2900-Land-Acquisition-G"><a href="#LG-2900-Land-Acquisition-G" class="headerlink" title="LG. 2900 Land Acquisition G"></a>LG. 2900 Land Acquisition G</h3><p>如果对于两个土地 $i,j$ 满足 $h_i\le h_j,w_i\le w_j$，那么土地 $i$ 一定是不用考虑的。将所有无用土地取出，剩下的按照 $h_i$ 从大到小排序</p>
+<p>此时设 $f_i$ 为购买前 $i$ 块土地所需要的最小花费，显然有 $f_i=\min(f_j+h_{j+1}w_i)$</p>
+<p>对于 $v_{x,y}=h_xw_y$，有：</p>
+<ul>
+<li>$v_{x,y+1}+v_{x+1,y}=h_xw_{y+1}+h_{x+1}w_y$</li>
+<li>$v_{x,y}+v_{x+1,y+1}=h_{x}w_y+h_{x+1}w_{y+1}$</li>
+</ul>
+<p>两式相减得到 $h_x(w_{y+1}-w_y)+h_{x+1}(w_y-w_{y+1})$，因为 $h_x&gt;h_{x+1}$ 所以 $v$ 满足四边形不等式，利用决策单调性优化即可</p>
+<h2 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h2><p>对于 $f_i=\min (f_j+au_i+bv_j+cu_iv_j+C)$，其中 $u_i$ 为与且仅与 $i$ 相关的单项式，$v_j$ 同理。多项式同理讨论即可</p>
+<p>将其转换为 $f_j=-(b+cu_i)v_j+f_i-au_i-C$，此时每个点可以表示为 $(v_j,f_j)$，每次转移就是用一条斜率为 $-(b+cu_i)$ 的直线去碰一个可以获得最小截距的点</p>
+<p>发现这样的点在凸包上，如果 $u_i$ 具有单调性那么每次转移的使用的直线的斜率具有单调性，用队列维护即可；如果没有那么需要在凸包上二分</p>
+<p>如果 $v_i$ 具有单调性，那么每次都是在凸包最后加入一个点，直接更新即可。否则需要利用平衡树等动态维护凸包</p>
+<h3 id="LG-4983-忘情"><a href="#LG-4983-忘情" class="headerlink" title="LG. 4983 忘情"></a>LG. 4983 忘情</h3><p>此处讨论斜率优化部分</p>
+<p>首先化简原式，可以将问题转化为当每段的值为 $(1+\sum x_i)^2$ 时，最优划分所划分出的序列的值的和</p>
+<p>记 $p_i$ 为前 $i$ 个数的和，显然有 $f_i=\min(f_j+(p_i-p_j+1)^2)$，将其拆开：</p>
+<script type="math/tex; mode=display">
+f_i=f_j+p_i^2+p_j^2-2p_ip_j+2p_i-2p_j+1</script><p>将其写成斜率优化的形式就是：</p>
+<script type="math/tex; mode=display">
+f_j+p_j^2=(2p_i+2)p_j+f_i-p_i^2-2p_i-1</script><p>发现斜率与点的横坐标都递增，这是一个经典的斜率优化的形式，此时将每个点设为 $(p_j,f_j+p_j^2)$，直接斜率优化即可</p>
+<h3 id="LG-4360-锯木厂选址"><a href="#LG-4360-锯木厂选址" class="headerlink" title="LG. 4360 锯木厂选址"></a>LG. 4360 锯木厂选址</h3><p>显然有：$f_i=\min(p_j-c_js_j+(p_i-p_j)-(c_i-c_j)s_i+p_n-p_i)$</p>
+<p>其中 $c_i$ 表示前 $i$ 棵树的重量和，$s_i$ 表示从第 $i$ 棵树走到山底的距离，$p_i$ 表示前 $i$ 棵树统一运到山脚的花费</p>
+<p>写成斜率优化的形式就是：</p>
+<script type="math/tex; mode=display">
+c_js_j=p_i-f_i+s_ic_j-s_ic_i+p_n-p_i</script><p>每个点为 $(c_i,c_is_i)$，用斜率为 $s_i$ 的直线碰凸包即可</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>
