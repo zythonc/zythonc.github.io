@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>树上GCD | こはるびより</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="今日热搜榜
+某人的找事行为让博主非常不满
+星屑テレパス暂时攒起来等以后一波爽过去
+
+将其转化为统计二元组 $(h_1,h_2)$ 的个数，其中 $h_1,h_2$ 均为 $d$ 的整数倍，结果用 $a_d$ 来存储，最后我们做一个 $n\log n$ 的容斥即可
+现在对于分治的每层分别考虑。设此连通">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="树上GCD"/>
+  <meta property="og:site_name" content="こはるびより"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="こはるびより" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">こはるびより</a><span class="split"></span><span class="title">树上GCD</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-14</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>某人的找事行为让博主非常不满</li>
+<li>星屑テレパス暂时攒起来等以后一波爽过去</li>
+</ul>
+<p>将其转化为统计二元组 $(h_1,h_2)$ 的个数，其中 $h_1,h_2$ 均为 $d$ 的整数倍，结果用 $a_d$ 来存储，最后我们做一个 $n\log n$ 的容斥即可</p>
+<p>现在对于分治的每层分别考虑。设此连通块深度最小的点为 $u$，联通块的重心为 $v$，那么就会出现两种情况</p>
+<ul>
+<li><p>当前两个点均在 $v$ 与其子树内，此时这两个点的 LCA 为 $v$</p>
+<p>对重心下面的子树进行搜索。设 $c_{d,i}$ 为第 $i$ 个子树内深度为 $d$ 的点的个数，那么我们要求的答案就是遍历 $d$，选择一个或两个子树它们的 $c_{d}$ 的乘积</p>
+<p>根据 $(x_1+x_2+\cdots x_k)^2=\sum_{i,j}x_ix_j$，我们可以在 $O(n_i\log n_i)$ 的时间复杂度内累积每个位置的倍数位置的点的数量和，平方后减掉多余的贡献最后除以 $2$ 即可。其中 $n_i$ 为第 $i$ 个子树的大小</p>
+</li>
+<li><p>当前有一个点不在 $v$ 或其子树内，此时这两个点的 LCA 在 $v$ 上面一直到 $u$ 的链上</p>
+<p>现在我们要统计两部分的贡献：第一部分是 $u\to v$（以下此符号均不包括 $v$）的这条链上的点，第二部分是这条链上的点延伸的子树内的点的贡献</p>
+<p>先考虑第一部分。由于深度在变化，那么现在我们要做的就是维护一个数组 $f_{i,j}$ 表示 $v$ 的子树中的点与 $v$ 的距离模 $i$ 余 $j$ 的点的个数有多少个。但是直接统计空间复杂度是不正确的，这启发我们利用根号分治</p>
+<p>令 $f$ 数组仅存储模 $&lt;\sqrt n$ 的结果，这样对于每个点就可以在 $O(\sqrt n)$ 的时间复杂度内算出对于 $a_d\;(d&lt;\sqrt n)$ 的贡献</p>
+<p>那么对于 $a_d\;(d\ge \sqrt n)$，我们预处理出 $sum$ 数组的前缀和 $pre$，其中 $sum_i$ 表示 $v$ 的子树中距离 $v$ 的长度为 $i$ 的点有多少个。将 $u\to v$ 看作一个整体，枚举 $d$ 对每个 $a_d$ 在 $pre$ 中查询 $O(\sqrt n)$ 个区间即可</p>
+<p>对于第二部分，遍历从这些点延伸的子树然后像“两个点均在 $v$ 及其子树内”的情况 $O(n_i\log n_i)$ 处理一下</p>
+<p>然后对于 $d&lt;\sqrt n$ 的情况是平凡的，利用 $f$ 数组即可</p>
+<p>对于大于等于 $\sqrt n$ 的直接每次 $O(\sqrt n)$ 暴力查询</p>
+<p>不管是哪种情况每层复杂度都是 $O(n\sqrt n)$，其中 $n$ 为当前连通块大小，根据主定理 $T(n)=2T(n/2)+O(\sqrt n)$，总体复杂度就是 $O(n\sqrt n)$ 的</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N=<span class="number">208244</span>,mod=<span class="number">998244353</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n,head[N],num,fa[N];</span><br><span class="line"><span class="type">bool</span> vis[N];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">edge</span> &#123;<span class="type">int</span> na,np;&#125; e[N&lt;&lt;<span class="number">1</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">const</span> <span class="type">int</span> f,<span class="type">const</span> <span class="type">int</span> t)</span> </span>&#123;e[++num]=(edge)&#123;head[f],t&#125;,head[f]=num;&#125;</span><br><span class="line"><span class="type">int</span> ms[N],siz[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">cent</span><span class="params">(<span class="type">const</span> <span class="type">int</span> now,<span class="type">const</span> <span class="type">int</span> fa,<span class="type">const</span> <span class="type">int</span> ts)</span> </span>&#123;</span><br><span class="line">	ms[now]=<span class="number">0</span>,siz[now]=<span class="number">1</span>;</span><br><span class="line">	<span class="type">int</span> sel=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=head[now];i;i=e[i].na) &#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[e[i].np]||e[i].np==fa) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="type">int</span> sub=<span class="built_in">cent</span>(e[i].np,now,ts);</span><br><span class="line">		<span class="keyword">if</span>(!sel||ms[sub]&lt;ms[sel]) sel=sub;</span><br><span class="line">		siz[now]+=siz[e[i].np],ms[now]=<span class="built_in">max</span>(ms[now],siz[e[i].np]);</span><br><span class="line">	&#125; ms[now]=<span class="built_in">max</span>(ms[now],ts-siz[now]);</span><br><span class="line">	<span class="keyword">if</span>(!sel||ms[now]&lt;ms[sel]) sel=now;</span><br><span class="line">	<span class="keyword">return</span> sel;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> dir[<span class="number">450</span>][<span class="number">450</span>],pre[N],npd,sum[N],sigs[N],ad[N],red[N],mxdis,ans[N];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">const</span> <span class="type">int</span> now,<span class="type">const</span> <span class="type">int</span> fa,<span class="type">const</span> <span class="type">int</span> dep,<span class="type">const</span> <span class="type">bool</span> fl=<span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">	sigs[dep]++;</span><br><span class="line">	<span class="keyword">if</span>(!fl) mxdis=<span class="built_in">max</span>(mxdis,dep),sum[dep]++;</span><br><span class="line">	<span class="keyword">else</span> npd=<span class="built_in">max</span>(npd,dep);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=head[now];i;i=e[i].na) &#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[e[i].np]||e[i].np==fa) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="built_in">dfs</span>(e[i].np,now,dep+<span class="number">1</span>,fl);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">(<span class="type">const</span> <span class="type">int</span> now,<span class="type">const</span> <span class="type">int</span> ts)</span> </span>&#123;</span><br><span class="line">	vis[now]=<span class="number">1</span>,mxdis=<span class="number">1</span>,sum[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=head[now];i;i=e[i].na) &#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[e[i].np]||fa[now]==e[i].np) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="built_in">dfs</span>(e[i].np,now,<span class="number">1</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>,p,bf=<span class="number">0</span>;sigs[o];o++,bf=<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">for</span>(p=o;sigs[p];p+=o) bf+=sigs[p];</span><br><span class="line">			red[o]+=bf*bf,ad[o]+=bf;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>;sigs[o];o++) sigs[o]=<span class="number">0</span>;</span><br><span class="line">	&#125; <span class="type">int</span> sqr=<span class="built_in">ceil</span>(<span class="built_in">sqrt</span>(mxdis)*<span class="number">0.1</span>),cp=now,las,dist=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;=mxdis;i++) &#123;</span><br><span class="line">		<span class="keyword">if</span>(!i) &#123;</span><br><span class="line">			pre[i]=sum[i];</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>;o&lt;sqr;o++) dir[o][<span class="number">0</span>]+=sum[i];</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			pre[i]=pre[i<span class="number">-1</span>]+sum[i];</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>;o&lt;sqr;o++) dir[o][i%o]+=sum[i];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(vis[fa[cp]]==<span class="number">0</span>&amp;&amp;fa[cp]) &#123;</span><br><span class="line">		las=cp,cp=fa[cp],dist++;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;sqr;i++) ans[i]+=dir[i][(i-dist%i)%i];</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> i=head[cp];i;i=e[i].na) &#123;</span><br><span class="line">			<span class="keyword">if</span>(e[i].np==fa[cp]||e[i].np==las||vis[e[i].np]) <span class="keyword">continue</span>;</span><br><span class="line">			npd=<span class="number">0</span>,<span class="built_in">dfs</span>(e[i].np,cp,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>,p;sigs[o];o++) &#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="type">int</span> p=o+o;sigs[p];p+=o) sigs[o]+=sigs[p];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>;o&lt;sqr&amp;&amp;o&lt;=npd;o++) ans[o]+=dir[o][(o-dist%o)%o]*sigs[o];</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=sqr,p;o&lt;=npd;o++) &#123;</span><br><span class="line">				<span class="keyword">for</span>(p=o-dist;p&lt;=mxdis;p+=o) &#123;</span><br><span class="line">					<span class="keyword">if</span>(p&lt;<span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">					ans[o]+=sum[p]*sigs[o];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">1</span>;sigs[o];o++) sigs[o]=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">auto</span> sigma=[&amp;](<span class="type">const</span> <span class="type">int</span> l,<span class="type">const</span> <span class="type">int</span> r) -&gt; <span class="type">int</span> &#123;</span><br><span class="line">		<span class="type">int</span> cr=<span class="built_in">min</span>(r,mxdis);</span><br><span class="line">		<span class="keyword">if</span>(l&lt;=<span class="number">0</span>) <span class="keyword">return</span> pre[cr];</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">return</span> pre[cr]-pre[l<span class="number">-1</span>];</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=mxdis;i++) ans[i]+=((<span class="number">1</span>+ad[i])*(<span class="number">1</span>+ad[i])-red[i]<span class="number">-1</span>)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=sqr;i&lt;=mxdis+dist;i++) &#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> o=i-dist;o&lt;=mxdis;o+=i) ans[i]+=<span class="built_in">sigma</span>(o,o+dist<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=mxdis;i++) red[i]=ad[i]=sum[i]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;sqr;i++) <span class="keyword">for</span>(<span class="type">int</span> o=<span class="number">0</span>;o&lt;i;o++) dir[i][o]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=head[now];i;i=e[i].na) &#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[e[i].np]) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="type">int</span> nps=siz[e[i].np]&gt;siz[now]?ts-siz[now]:siz[e[i].np];</span><br><span class="line">		<span class="built_in">solve</span>(<span class="built_in">cent</span>(e[i].np,now,nps),nps);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;=n;i++) cin&gt;&gt;fa[i],<span class="built_in">add</span>(fa[i],i),<span class="built_in">add</span>(i,fa[i]);</span><br><span class="line">	<span class="built_in">solve</span>(<span class="built_in">cent</span>(<span class="number">1</span>,<span class="number">0</span>,n),n);</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-1</span>;i;i--) <span class="keyword">for</span>(<span class="type">int</span> o=i+i;o&lt;n;o+=i) ans[i]-=ans[o];</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++) cout&lt;&lt;ans[i]&lt;&lt;<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>
