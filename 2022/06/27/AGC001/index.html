@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>AGC 001 | \星屑テレパス/</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="今日热搜榜
+因为言论自由，本条被强制撤下了！
+
+A真的有必要写吗
+B让其先反射两次，发现现在要求的就变成了：从一个平行四边形的一个顶点出发，光线反射规则与原问题相同，求光线经过的轨迹长度
+再让其反射两次，发现对答案的贡献是两倍的短边的长度，且问题变成了原问题缩短长边后的相同问题
+发现这个过程其实就是">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="AGC 001"/>
+  <meta property="og:site_name" content="\星屑テレパス/"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="\星屑テレパス/" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 001</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-27</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>因为言论自由，本条被强制撤下了！</li>
+</ul>
+<h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><p>真的有必要写吗</p>
+<h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>让其先反射两次，发现现在要求的就变成了：从一个平行四边形的一个顶点出发，光线反射规则与原问题相同，求光线经过的轨迹长度</p>
+<p>再让其反射两次，发现对答案的贡献是两倍的短边的长度，且问题变成了原问题缩短长边后的相同问题</p>
+<p>发现这个过程其实就是在求 GCD，于是只需要讨论平行四边形长边等于短边时的答案</p>
+<p>发现对于一个边长为 $n$ 的菱形，对答案的贡献就是 $n$</p>
+<p>于是对于一个长边长度为 $x$，短边长度为 $y$ 的平行四边形，光线的长度是 $2(x+y)-3\gcd(x,y)$</p>
+<p>于是原问题的答案就是 $3(n-\gcd(n,x))$</p>
+<h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>考虑固定两个端点时，我们只需要对这条路径上的每个点统计到这个点距离不超过这个点到两个直径端点的距离的最小值的点的个数就可以了</p>
+<p>发现对于这种情况，对于每个点统计的东西都是有明确范围的</p>
+<p>这种做法的复杂度是 $O(n^3)$，于是想到只枚举一个端点。但此时如果统计到这个点距离不超过 $k$ 的点的个数，那么我们无法保证这个点是直径的端点</p>
+<p>但是不难想到直径的性质，于是我们枚举直径的中心即可，复杂度 $O(n^2)$</p>
+<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>我们不妨将每个位置看作一个点，一条边就表示着这条边的两个端点所表示的字符相等。于是如果两条边能相互到达，就表示这两个点所表示的字符相同</p>
+<p>在这样的情况下，每一个回文串就相当于连一些边，或者说一些限制。为了讨论方便，我们不妨设有两排点 $A,B$ 分别表示 $a$ 序列的限制和 $b$ 序列的限制</p>
+<p>在一开始，我们应当在 $a_i$ 与 $b_i$ 之间连一条边，因为他们表示的是同一个位置</p>
+<p>我们发现，如果 $a_i$ 是一个奇数，那么这个回文串的中心是不会有限制的，此时如果向让这个位置与其他位置相等，就必须在 $b$ 中建立一个对这个点的限制</p>
+<p>如果我们称极大的，能相互到达的点集为一个等价类的话，那么这个等价类的形态只有两种：一条线或是一个环</p>
+<p>因此这就说明了 $A$ 中不能存在多于 $2$ 个奇数</p>
+<p>我们知道，对于一个回文串如果删掉一个字符或是增加一个字符，那么形成的新的串不可能是回文串（增删前后这个串不同的字符数量大于 $1$）</p>
+<p>然后很显然的，不存在 border 为 $1$ 的偶回文串（不同字符数量大于 $1$）</p>
+<p>因此我们直接基于这个思路构造，将奇数放两边，$b_1$ 设为 $a_1-1$，后面顺次移位，最后的一个数加 $1$ 即可</p>
+<p>边界特判</p>
+<h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>经典问题</p>
+<h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>首先我们发现如果连续的交换一些数（例如 $a+2$ 与 $a+1$ 换，$a+1$ 与 $a$ 换……），那么产生的效果就是顺次移位</p>
+<p>因此根据套路直接考虑逆排列，发现此时 $a$ 与 $b$ 可以交换的条件变成了 $|a-b|\ge k$ 并且需要这两个数相邻</p>
+<p>此时我们需要的是一个字典序最小的排列，那么如果 $b-a\ge k$ 事实上我们也不会交换的</p>
+<p>因此现在问题就变成了给定一组序列与一些限制，被限制的一对数相邻时不能交换，求能得到的最小字典序排列</p>
+<p>显然对于有限制的一对数，只要不改变他们的相对位置，那么最后形成的排列就一定是合法的</p>
+<p>发现与冒泡排序很相似，直接归并排序就是 $O(n\log n)$，这个思路被题解区的某巨抢先了</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>
