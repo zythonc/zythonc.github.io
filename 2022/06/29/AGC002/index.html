@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>突然的填坑 | \星屑テレパス/</title>
+  <title>AGC 002 | \星屑テレパス/</title>
   <meta name="author" content="zythonc">
   
-  <meta name="description" content="之前说一定要把 page 搞完，于是填坑
-Test：$\sqrt{a^2+b^2}$">
+  <meta name="description" content="这场没啥好写的，但是不写会看起来不连贯，于是水一水
+D尝试使用整体二分做此题
+二分编号的值域，对于每个连通块用并查集维护大小
+因为需要撤销所以不能使用路径压缩，但事实上可以使用维护连通块大小的数组对其进行按秩合并
+于是每次判断询问的两个点是否在同一个连通块里即可，如果是就统计一次，不是就把两个连通块">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="突然的填坑"/>
+  <meta property="og:title" content="AGC 002"/>
   <meta property="og:site_name" content="\星屑テレパス/"/>
 
   
@@ -48,7 +51,7 @@ MathJax.Hub.Config({
   <div class="container" id="container">
 	<div class="content">
 	  <div class="page-header">		
-  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">突然的填坑</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-01</span></h1>
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 002</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-29</span></h1>
 </div>		
 
 <div class="row page">
@@ -61,8 +64,13 @@ MathJax.Hub.Config({
 	  
 
 	  <!-- content -->
-	  <p>之前说一定要把 page 搞完，于是填坑</p>
-<p>Test：$\sqrt{a^2+b^2}$</p>
+	  <p>这场没啥好写的，但是不写会看起来不连贯，于是水一水</p>
+<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>尝试使用整体二分做此题</p>
+<p>二分编号的值域，对于每个连通块用并查集维护大小</p>
+<p>因为需要撤销所以不能使用路径压缩，但事实上可以使用维护连通块大小的数组对其进行按秩合并</p>
+<p>于是每次判断询问的两个点是否在同一个连通块里即可，如果是就统计一次，不是就把两个连通块大小加起来判断</p>
+<h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>经典问题啦</p>
+<h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>简单问题啦</p>
 	  
 
 	  <div>
@@ -78,33 +86,11 @@ MathJax.Hub.Config({
 		
 	
 		
-	
+			
 		
 	
 		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
+			
 		
 	
 		
@@ -112,13 +98,45 @@ MathJax.Hub.Config({
 			
 		
 	
+		
+			
+			
+			
+		
+			
+		
+	
+		
+	
+		
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
 	
 	
-		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+		<li class="prev"><a href="/2022/06/30/AGC004/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
 	
 	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
 	
-		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+		<li class="next"><a href="/2022/06/28/AGC003/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
 	
 </ul>
 </div>

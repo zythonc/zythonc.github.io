@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>突然的填坑 | \星屑テレパス/</title>
+  <title>AGC 003 | \星屑テレパス/</title>
   <meta name="author" content="zythonc">
   
-  <meta name="description" content="之前说一定要把 page 搞完，于是填坑
-Test：$\sqrt{a^2+b^2}$">
+  <meta name="description" content="D首先有一个非常自然的想法：将每个数看作一个点。对于一对数 $(a,b)$，如果它们的乘积为完全平方数，那么就在它们之间连一条边。要得到答案就对这张图求最大独立集即可
+而在一般图上求最大独立集是 NPC 问题，因此这启发我们寻求一下这张图的性质
+我们发现，对于任意长度为 $4$ 的链，其首尾两个结点">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="突然的填坑"/>
+  <meta property="og:title" content="AGC 003"/>
   <meta property="og:site_name" content="\星屑テレパス/"/>
 
   
@@ -48,7 +49,7 @@ MathJax.Hub.Config({
   <div class="container" id="container">
 	<div class="content">
 	  <div class="page-header">		
-  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">突然的填坑</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-01</span></h1>
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 003</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-28</span></h1>
 </div>		
 
 <div class="row page">
@@ -61,8 +62,13 @@ MathJax.Hub.Config({
 	  
 
 	  <!-- content -->
-	  <p>之前说一定要把 page 搞完，于是填坑</p>
-<p>Test：$\sqrt{a^2+b^2}$</p>
+	  <h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>首先有一个非常自然的想法：将每个数看作一个点。对于一对数 $(a,b)$，如果它们的乘积为完全平方数，那么就在它们之间连一条边。要得到答案就对这张图求最大独立集即可</p>
+<p>而在一般图上求最大独立集是 NPC 问题，因此这启发我们寻求一下这张图的性质</p>
+<p>我们发现，对于任意长度为 $4$ 的链，其首尾两个结点一定存在边连接它们。并且对于一个数如果其想与另一个数相乘形成一个完全平方数，就要保证对于每一个相同的质因子 $p$，他们的指数之和相等</p>
+<p>这就启发我们对于每一个数将其变成质因子分解后每个指数模 $3$ 之后的数</p>
+<p>于是对于一些完全立方数，我们最多选取它们中的一个</p>
+<p>现在剔除掉所有的完全立方数，并且考虑一个联通块，我们发现其一定可以表示成一条末端是菊花的链，此时我们发现对于一对有连边的不同的数 $(a,b)$，我们要么选取 $cnt_a$，要么选取 $cnt_b$</p>
+<p>于是直接 pollard-rho 一下，或者筛 $\sqrt[3]{s_{max}}$ 即可</p>
 	  
 
 	  <div>
@@ -78,33 +84,15 @@ MathJax.Hub.Config({
 		
 	
 		
-	
+			
 		
 	
 		
-	
+			
 		
 	
 		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
+			
 		
 	
 		
@@ -112,13 +100,41 @@ MathJax.Hub.Config({
 			
 		
 	
+		
+			
+			
+			
+		
+	
+		
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
 	
 	
-		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+		<li class="prev"><a href="/2022/06/29/AGC002/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
 	
 	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
 	
-		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+		<li class="next"><a href="/2022/06/28/AGC006/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
 	
 </ul>
 </div>

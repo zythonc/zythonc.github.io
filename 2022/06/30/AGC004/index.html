@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>突然的填坑 | \星屑テレパス/</title>
+  <title>AGC 004 | \星屑テレパス/</title>
   <meta name="author" content="zythonc">
   
-  <meta name="description" content="之前说一定要把 page 搞完，于是填坑
-Test：$\sqrt{a^2+b^2}$">
+  <meta name="description" content="C尝试用两个互补的图形将给出的这个图案串起来就好了
+D简单问题啦
+F私以为应尽量将一件事物转化为另一件等价的易于理解的事物，然后对其进行分析
+首先显然的，如果总点数为奇数，那么一定是无解的
+然后非常套路的进行染色。发现如果能成功染色，树与偶环的情况一定至少存在一组解。这是因为如果有两个点没有被染成黑">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="突然的填坑"/>
+  <meta property="og:title" content="AGC 004"/>
   <meta property="og:site_name" content="\星屑テレパス/"/>
 
   
@@ -48,7 +51,7 @@ MathJax.Hub.Config({
   <div class="container" id="container">
 	<div class="content">
 	  <div class="page-header">		
-  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">突然的填坑</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-01</span></h1>
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 004</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-30</span></h1>
 </div>		
 
 <div class="row page">
@@ -61,8 +64,20 @@ MathJax.Hub.Config({
 	  
 
 	  <!-- content -->
-	  <p>之前说一定要把 page 搞完，于是填坑</p>
-<p>Test：$\sqrt{a^2+b^2}$</p>
+	  <h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>尝试用两个互补的图形将给出的这个图案串起来就好了</p>
+<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>简单问题啦</p>
+<h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>私以为应尽量将一件事物转化为另一件等价的易于理解的事物，然后对其进行分析</p>
+<p>首先显然的，如果总点数为奇数，那么一定是无解的</p>
+<p>然后非常套路的进行染色。发现如果能成功染色，树与偶环的情况一定至少存在一组解。这是因为如果有两个点没有被染成黑色，那么这两个点一定分属于二部图的两个不同的部分，它们之间的路径上的点数为偶数。于是我们将这条路径上的点（不包括两个端点）全部染成白色，最后将整个路径（包括两个端点）染成黑色即可</p>
+<p>对于奇数环的情况，我们发现如果这张图的点数为偶数即有解。这是因为如果在奇环上任意选取两个点，那么这两个点之间一定存在一条路径上面的点数为偶数。于是对于没有染色的点将其操作到环上即可</p>
+<p>现在我们仿照首段说的，将反转一条边的两个端点的颜色变成移动标记。对于一个经过了黑白染色的树，我们在黑色点上放置一个标记，而我们要做的就是将所有在黑色点上的标记移动到白色点上</p>
+<p>以下的讨论黑白点均指黑白染色后的点</p>
+<p>考虑一个点与它的子树，如果其内的黑白点的数量相差 $a$，那么显然其与父亲的这条边就一定会被经过至少 $a$ 次</p>
+<p>而这个下界是显然容易得到的，因此树的情况我们就考虑完毕了</p>
+<p>现在我们不妨将边权转化为点权，也即每个点的权值为其与父亲的连边的最少经过次数</p>
+<p>如果出现了一个偶环，那么我们发现肯定有一些标记会从这条边经过“抄近道”</p>
+<p>不妨设有 $x$ 个标记经过，那么对于这条边左边的部分的点权会 $-x$，右边会 $+x$。事实上我们实现的时候使用 dfs 是不会出现右边部分的，因此我们考虑最小化 $\sum a_i-x$。这是一个简单的问题，取 $x$ 为 $a$ 序列的中位数即可</p>
+<p>如果出现了一个奇环，那么它的作用即是同时消除两个标记或同时增加两个标记。不难发现这条边操作 $|c_0-c_1|/2$ 次是最优的，其中 $c_0,c_1$ 分别表示黑白点的出现次数，因此我们可以在一开始就操作这条边然后删掉这条边，余下的按照树的情况处理即可</p>
 	  
 
 	  <div>
@@ -78,33 +93,7 @@ MathJax.Hub.Config({
 		
 	
 		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
+			
 		
 	
 		
@@ -112,13 +101,49 @@ MathJax.Hub.Config({
 			
 		
 	
+		
+			
+			
+			
+		
+			
+		
+	
+		
+			
+		
+	
+		
+	
+		
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
 	
 	
-		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+		<li class="prev"><a href="/2022/07/01/AGC005/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
 	
 	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
 	
-		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+		<li class="next"><a href="/2022/06/29/AGC002/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
 	
 </ul>
 </div>

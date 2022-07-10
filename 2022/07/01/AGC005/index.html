@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>突然的填坑 | \星屑テレパス/</title>
+  <title>AGC 005 | \星屑テレパス/</title>
   <meta name="author" content="zythonc">
   
-  <meta name="description" content="之前说一定要把 page 搞完，于是填坑
-Test：$\sqrt{a^2+b^2}$">
+  <meta name="description" content="F首先设 $1$ 为根结点，规定一个点集被统计的位置为深度最浅的那个点。那么很显然的就存在一个 dp
+设 $f_{i,j}$ 为从 $i$ 结点的子树内选择 $j$ 个点的所有方案的连通块大小之和，规定这个连通块是要包括 $i$ 这个点的，无论这个点是否被选中
+那么直接转移就是 $O(n^3)$ 的">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="突然的填坑"/>
+  <meta property="og:title" content="AGC 005"/>
   <meta property="og:site_name" content="\星屑テレパス/"/>
 
   
@@ -48,7 +49,7 @@ MathJax.Hub.Config({
   <div class="container" id="container">
 	<div class="content">
 	  <div class="page-header">		
-  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">突然的填坑</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-01</span></h1>
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 005</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-07-01</span></h1>
 </div>		
 
 <div class="row page">
@@ -61,8 +62,23 @@ MathJax.Hub.Config({
 	  
 
 	  <!-- content -->
-	  <p>之前说一定要把 page 搞完，于是填坑</p>
-<p>Test：$\sqrt{a^2+b^2}$</p>
+	  <h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>首先设 $1$ 为根结点，规定一个点集被统计的位置为深度最浅的那个点。那么很显然的就存在一个 dp</p>
+<p>设 $f_{i,j}$ 为从 $i$ 结点的子树内选择 $j$ 个点的所有方案的连通块大小之和，规定这个连通块是要包括 $i$ 这个点的，无论这个点是否被选中</p>
+<p>那么直接转移就是 $O(n^3)$ 的</p>
+<p>现在将连通块拆开，固定一个 $f_i$，对于每个点 $u$ 求出其被包含的方案数即可。我们可以用所有的方案减掉不合法的方案，不难发现一个方案不合法当且仅当这个点集全部在 $u$ 的同一个子树中</p>
+<p>设 $siz_{i,j}$ 为以 $i$ 为根结点的时候，第 $j$ 个子树的大小，再设 $cnt_i$ 为 $siz$ 数组中，值为 $i$ 的有多少个，那么：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f_k&=\sum_{i=1}^n\left(\binom{n}{k}-\sum_{j}\binom{siz_{i,j}}{k}\right)
+\\
+&=n\binom{n}{k}-\sum_{i=k}^ncnt_i\binom{i}{k}
+\\
+&=n\binom{n}{k}-\dfrac1{k!}\sum_{i=k}^ncnt_i\dfrac{i!}{(i-k)!}
+\end{aligned}</script><p>现在设 $F_i=cnt_ii!$ 再设 $G_i=1/i!$，那么现在要求的就变成了 $\sum F_iG_{i-k}$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum_{i=k}^nF_iG_{i-k}=\sum_{i=0}^{n-k}F_{i+k}G_i=\sum_{i=0}^{n-k}F^\prime_{n-k-i}G_i
+\end{aligned}</script><p>其中 $F^\prime$ 为 $F$ 反转之后的结果，直接 NTT 就是 $O(n\log n)$ 的</p>
 	  
 
 	  <div>
@@ -78,38 +94,48 @@ MathJax.Hub.Config({
 		
 	
 		
-	
+			
+			
 		
 	
 		
-	
+			
+			
+			
+		
+			
 		
 	
 		
-	
+			
 		
 	
 		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
-		
-	
+			
 		
 	
 		
 	
 		
 			
-			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
 		
 	
 	
@@ -118,7 +144,7 @@ MathJax.Hub.Config({
 	
 	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
 	
-		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+		<li class="next"><a href="/2022/06/30/AGC004/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
 	
 </ul>
 </div>

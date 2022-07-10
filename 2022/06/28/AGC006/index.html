@@ -1,0 +1,208 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>AGC 006 | \星屑テレパス/</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="C首先一个兔子跳一下新的坐标应该有两种可能，假设连续的三只兔子 $r_1,r_2,r_3$ 的坐标分别是 $a,b,c$，$b$ 的新坐标一种是 $2a-b$，一种是 $2c-b$
+那么跳完之后 $r_2$ 的坐标期望应该是 $\frac1 2\mathbb{E}[2r_1-r_2]+\frac 1">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="AGC 006"/>
+  <meta property="og:site_name" content="\星屑テレパス/"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="\星屑テレパス/" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">AGC 006</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-06-28</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>首先一个兔子跳一下新的坐标应该有两种可能，假设连续的三只兔子 $r_1,r_2,r_3$ 的坐标分别是 $a,b,c$，$b$ 的新坐标一种是 $2a-b$，一种是 $2c-b$</p>
+<p>那么跳完之后 $r_2$ 的坐标期望应该是 $\frac1 2\mathbb{E}[2r_1-r_2]+\frac 1 2 \mathbb E[2r_3-r_2]=\mathbb E[r_1]+\mathbb E[r_3]-\mathbb E[r_2]$</p>
+<p>按照套路差分一下，发现每一次这样的操作就相当于交换差分数组的相邻两项</p>
+<p>于是对置换快速幂即可，循环群总是交换群，所以怎么写都没有事</p>
+<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>首先比较显然的是如果两个相同的挨在一起，那么它们上面的所有方格里面的数与这两个方格相同</p>
+<p>称一组极大的连续相同方格为一个等价类（方格数量大于 $1$），那么相邻的两个等价类之间肯定都是 $01$ 交替</p>
+<p>发现对于 $01$ 交替的这些格子，上面一层肯定与本层恰好相反</p>
+<p>因此我们只需要二分答案，找到距离中心最近的那个等价类里面的数字，如果是 $1$ 说明当前二分的答案可以到达顶端</p>
+<p>特判一下最下面一层没有等价类都是 $01$ 交替的情况就可以了</p>
+<h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>将题目转化为：如果 $(x,y),(y,z)$ 之间有边，那么我们可以在 $(z,x)$ 之间连一条边</p>
+<p>我们不妨将一条边的意义看作“推出”，也就是说如果 $x\to y$，那么 $x$ 可以推出 $y$</p>
+<p>现在我们尝试找到一个符合上述解释的定义：对于每一个点指定一个在 $0$ 到 $2$ 之间的编号 $x$，如果 $x\to y$，那么 $id_x+1\equiv id_y\pmod{3}$，称作点 $x$ 推出 $+1$ 后相等的 $y$</p>
+<p>因为不同的连通块相互独立，以下我们默认讨论的都是一个连通块</p>
+<p>现在假设一定有解，也就是说存在一种指定编号的方案满足所有的边的限制。我们可以得到一些结论：</p>
+<ul>
+<li>当任意一个点的编号被确定时，整张图的任意一个点的编号都会被唯一确定</li>
+<li>确定编号后，按照给定规则连边，任意两个满足 $id_a+1\equiv id_d\pmod{3}$ 的点之间都会被连上边</li>
+</ul>
+<p>现在我们考虑如果添加一条边，使得不再有合法的方案会发生什么。也就是说存在一条边满足 $id_a=id_b$ 或 $id_a+2\equiv id_b\pmod{3}$。这里我们讨论第一种情况，第二种情况可以类似得出</p>
+<p>根据上述结论，显而易见的，点 $b$ 可以推出任意 $+2$ 后相等的点，同时利用这些边还可以推出任意 $+0$ 后相等的点。也就是说点 $b$ 做到了包括 $a$ 在内的任意推出，于是 $a$ 也可以任意推出。整张图变成了完全图</p>
+<p>如果没有这样的边，那么考虑最终的编号种数。如果少于 $3$ 种，那么我们肯定是无法操作的。如果等于三种，那么 $0\to1,1\to2,2\to 0$ 的推出按照规则连边之后都是存在的，于是将编号等于其的点的数量相乘即可</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+			
+		
+	
+		
+			
+			
+		
+	
+		
+	
+		
+			
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev"><a href="/2022/06/28/AGC003/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next"><a href="/2022/06/27/AGC001/" class="alignright next">next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>

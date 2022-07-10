@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>min-max容斥乱谈 | \星屑テレパス/</title>
+  <meta name="author" content="zythonc">
+  
+  <meta name="description" content="今日热搜榜
+原敬遇刺一事使纺的教室里到处是紧张不安的气氛
+Lycoris Recoil 第二集的放送已经成为这两天某吧最大的话题，一向直性子的某人直言道：千束这样躲子弹，只怕是连面子都不要了
+
+一般形式为：
+
+\begin{aligned}
+\max(S)=\sum_{T\subseteq S}(-">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="min-max容斥乱谈"/>
+  <meta property="og:site_name" content="\星屑テレパス/"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="\星屑テレパス/" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">  
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">  
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    showProcessingMessages: false, messageStyle: "none", extensions: ["tex2jax.js"], jax: ["input/TeX", "output/SVG"], tex2jax: { inlineMath: [ ["$", "$"] ], displayMath: [ ["$$","$$"] ], skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'], ignoreClass:"comment-content" }, "HTML-CSS": { availableFonts: ["STIX","TeX"], showMathMenu: false } }); MathJax.Hub.Queue(["Typeset",MathJax.Hub]); </script> <script src="//cdn.bootcss.com/mathjax/2.7.7/MathJax.js"></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body id="body" data-spy="scroll" data-target=".toc">
+  <div class="container" id="container">
+	<div class="content">
+	  <div class="page-header">		
+  <h1><a class="brand" href="/">\星屑テレパス/</a><span class="split"></span><span class="title">min-max容斥乱谈</span><span class="date" id="title-date"><i class="fa fa-clock-o"></i> 2022-07-09</span></h1>
+</div>		
+
+<div class="row page">
+  <!-- cols -->	
+  
+  
+
+  
+	<div class="col-md-12">
+	  
+
+	  <!-- content -->
+	  <h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul>
+<li>原敬遇刺一事使纺的教室里到处是紧张不安的气氛</li>
+<li>Lycoris Recoil 第二集的放送已经成为这两天某吧最大的话题，一向直性子的某人直言道：千束这样躲子弹，只怕是连面子都不要了</li>
+</ul>
+<p>一般形式为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\max(S)=\sum_{T\subseteq S}(-1)^{|T|-1}\min(T)
+\\
+\min(S)=\sum_{T\subseteq S}(-1)^{|T|-1}\max(T)
+\end{aligned}</script><p>证明也是非常简单的，设最大值为 $m$，考虑 $|T|=1$ 的时候，我们将 $\min(T)$ 求和，这个时候除了最大值以外的值会被多算一次</p>
+<p>那么去除这部分的贡献的方法是在 $|T|=2$ 的时候利用 $\min(m,x)$ 去除。但是 $\min(x,y)$ 会被多减去一次</p>
+<p>仿照上面的思想，只需要在 $|T|=3$ 的时候利用 $\min(m,x,y)$ 加上就可以了，以此类推就证得了</p>
+<p>其扩展形式为：</p>
+<script type="math/tex; mode=display">
+\max_{k}(S)=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\min(T)
+\\
+\min_{k}(S)=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\max(T)</script><p>证明也是比较简单的，设 $s$ 为一个集合中最小的数，那么我们要去除一开始 $|T|=k$ 时冗余统计的集合</p>
+<p>对于一个集合 $T$ 满足 $|T|=k$，我们为其添加一个大于等于 $s$ 的数，然后令这个集合为去除集合 $T$ 多余贡献的集合</p>
+<p>对于任意 $k&gt;0$，我们发现 $\sum\limits_{i=0}^{k}(-1)^i\binom k i=0$，然后正确性就得到了证明</p>
+<p>现在我们要明确的，就是对于任意的一个集合 $T$ 它应该被减或加多少次。不难发现只要不去除集合内的 $s$，那么任意去除一个集合都是合法的，所以其贡献是 $\binom{|T|-1}{|T|-k}=\binom{|T|-1}{k-1}$</p>
+<p>而其在期望形式下也是成立的。网上大部分使用记号 $\mathbb E(\max(S))$，个人认为这种写法不是很严谨，这里我们用 $\mathbb E_{\max}[S]$ 代替它，它与 $\mathbb E[x]$ 是等价的，其中随机变量 $x$ 等于集合内所有随机变量最大值</p>
+<p>于是就有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb E_{\max}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]
+\\
+\mathbb E_{\min}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\max}[T]
+\end{aligned}</script><p>我们来尝试证明一下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb E_{\max}[S]&=\sum_{\{P,U\}\to S}\prod p_i\max(U)
+\\
+&=\sum_{\{P,U\}\to S}\prod p_i\sum_{V\subseteq U}(-1)^{|V|-1}\min(V)
+\\
+&=\sum_{\{P,V\}\to T\subseteq S}(-1)^{|V|-1}\min(V)\prod p_i
+\\
+&=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]
+\end{aligned}</script><p>不是很难对吧？</p>
+<p>其中记号 $\{P,U\}\to S$ 表示集合 $U$ 遍历 $S$ 中所有随机变量的所有可能取值组合，且 $p_i$ 等于（对应于） $x_i\in S$ 取 $u_i$ 的概率</p>
+<p>$\prod p_i$ 直接被化到里面的原因显然（证明期望的线性性的时候也是这个原因，嘛不同的人有不同的证明方法，这里只是自言自语），不再赘述</p>
+<p>类似的，在期望的形式下，其扩展形式为：</p>
+<script type="math/tex; mode=display">
+\mathbb E_{\max}^k[S]=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\min}[T]
+\\
+\mathbb E_{\min}^k[S]=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\max}[T]</script><p>证明仿照一般形式证明即可，这里不再赘述</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="LG-3175-按位或"><a href="#LG-3175-按位或" class="headerlink" title="LG. 3175 按位或"></a>LG. 3175 按位或</h3><p>首先设 $\mathbb E[x]$ 为 $x$ 的期望选中时间</p>
+<p>很套路的，我们将这个问题按位拆开考虑。现在的问题就变成了求出 $\mathbb E_{\max}[S]$，其中 $S=\{2^1-1,\cdots,2^n-1\}$。选中每个数 $t$ 变成了选中一个集合 $T=\{2^{k_1-1},\cdots\}$，其中 $k_i$ 表示 $t$ 的这一位上为 $1$</p>
+<p>然后把它用 min-max 容斥变成另外一个形式：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb E_{\max}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]
+\end{aligned}</script><p>现在的任务就变成了求出 $\mathbb E_{\min}[T]$，而这个期望式子的意义是，集合里第一个被选中的位出现的时间</p>
+<p>这个概率服从几何分布，于是其期望就是 $\frac 1 p$，其中 $p$ 是被选中的概率，更具体的：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+p=\sum_{R\cap T\ne\emptyset}p_{R}
+\end{aligned}</script><p>我们对 $R$ 求出它的补集的子集和然后减一下就得到了这个结果，于是直接利用或卷积的正变换可以做到 $O(2^n)$</p>
+<p>现在我们只要在碰到 $p=0$ 的时候输出无解就可以了，这就代表着所有这一位为 $1$ 的数被选中的概率都是 $0$</p>
+<h3 id="LG-4707-重返现世"><a href="#LG-4707-重返现世" class="headerlink" title="LG. 4707 重返现世"></a>LG. 4707 重返现世</h3><p>首先我们发现 $\mathbb E_{\min}[S]$ 是好求的，于是我们令 $k=n-k+1$，现在的问题就变成了求第 $k$ 大</p>
+<p>根据扩展形式的 min-max 容斥，我们很容易得到一个式子，直接计算这个式子是 $O(2^n)$ 的</p>
+<p>不过我们可以设计一个 dp，令 $f_{i,j,k}$ 表示前 $i$ 个数选择了 $j$ 个，现在的概率分子之和为 $k$，那么我们就可以在 $O(n^2m)$ 的时间复杂度内求解</p>
+<p>现在我们发现 $k$ 很小，考虑直接统计 $\sum\limits_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\min}[T]$</p>
+<p>不过根据 dp 过程，加入一个数是不好维护的，问题就出在我们无法快速维护 $\binom{|T|-1}{k-1}$ 和 $\mathbb E_{\min}[T]$</p>
+<p>但是我们发现 $\mathbb E_{\min}[T]$ 在 $\sum p_i$ 固定的情况下取值是相同的，于是我们把它抛弃</p>
+<p>然后根据 $\binom n k=\binom{n-1}k+\binom {n-1}{k-1}$，我们可以为 $k$ 单独开一维</p>
+<p>设 $dp_{i,j,k}$ 为前 $i$ 个数，选择的数的概率分子之和为 $j$，$k$ 的定义同上</p>
+<p>此时很显然的转移方程就是 $dp_{i,j,k}=dp_{i-1,j,k}+dp_{i-1,j-p_i,k-1}-dp_{i-1,j-p_i,k}$</p>
+<p>初始值设为 $dp_{i,0,0}=1$，然后对第一维滚动一下即可</p>
+<h3 id="LG-5643-随机游走"><a href="#LG-5643-随机游走" class="headerlink" title="LG. 5643 随机游走"></a>LG. 5643 随机游走</h3><p>首先 min-max 容斥一下，现在我们要求的便是 $\mathbb E_{\min}[S]$</p>
+<p>设 $f_{i,S}$ 表示从点 $i$ 出发，第一次经过点集 $S$ 中的任意一点时的期望步数</p>
+<p>那么设 $d_i$ 表示点 $i$ 的度数，显然有：</p>
+<script type="math/tex; mode=display">
+f_{i,S}=\dfrac{1}{d_i}\left(f_{fa_i,S}+\sum_{v} f_{v,S}\right)+1</script><p>现在令 $f_{i,S}=k_if_{fa_i,S}+b_i$，那么就有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+d_if_{i,S}&=f_{fa_i,S}+\sum_{v}k_vf_{i,S}+\sum_{v}b_i+d_i
+\\
+\left(d_i-\sum_{v}k_v\right)(k_if_{fa_i,S}+b_i)&=f_{fa_i,S}+\sum_{v}k_vf_{i,S}+\sum_{v}b_i+d_i
+\end{aligned}</script><p>令两边系数相等，那么就有：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+k_i=\dfrac1{d_i-\sum\limits_{v}k_v}
+\\
+b_i=\dfrac{\sum\limits_{v}b_v+d_i}{d_i-\sum\limits_{v}k_v}
+\end{cases}</script><p>现在对于每一次询问我们要求的便是 $\sum_{T\subseteq S}(-1)^{|T|+1}f_{x,T}$，这是一个经典的子集和形式，预处理一下即可做到 $O(n2^n)$</p>
+	  
+
+	  <div>
+  		<center>
+		  <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+	
+	
+	
+		
+			
+			
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>prev</a></li>
+	
+	<li><a href="/"><i class="fa fa-archive"></i>Home</a></li>
+	
+		<li class="next disabled"><a>next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+		</center>
+	  </div>
+	  
+	</div> <!-- col-md-9/col-md-12 -->
+	
+  </div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+	<footer> <p>
+  &copy; 2022 zythonc
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a target="_blank" rel="noopener" href="http://github.com/wzpan/hexo-theme-wixo/">Wixo</a>.    
+</p> </footer>
+  </div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.tableofcontents.min.js"></script>
+<script src="/js/tocgenerator.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+</body>
+</html>

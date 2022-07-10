@@ -4,11 +4,144 @@
   
     
     <entry>
+      <title>min-max容斥乱谈</title>
+      <link href="/2022/07/09/min-max%E5%AE%B9%E6%96%A5/"/>
+      <url>/2022/07/09/min-max%E5%AE%B9%E6%96%A5/</url>
+      
+        <content type="html"><![CDATA[<h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul><li>原敬遇刺一事使纺的教室里到处是紧张不安的气氛</li><li>Lycoris Recoil 第二集的放送已经成为这两天某吧最大的话题，一向直性子的某人直言道：千束这样躲子弹，只怕是连面子都不要了</li></ul><p>一般形式为：</p><script type="math/tex; mode=display">\begin{aligned}\max(S)=\sum_{T\subseteq S}(-1)^{|T|-1}\min(T)\\\min(S)=\sum_{T\subseteq S}(-1)^{|T|-1}\max(T)\end{aligned}</script><p>证明也是非常简单的，设最大值为 $m$，考虑 $|T|=1$ 的时候，我们将 $\min(T)$ 求和，这个时候除了最大值以外的值会被多算一次</p><p>那么去除这部分的贡献的方法是在 $|T|=2$ 的时候利用 $\min(m,x)$ 去除。但是 $\min(x,y)$ 会被多减去一次</p><p>仿照上面的思想，只需要在 $|T|=3$ 的时候利用 $\min(m,x,y)$ 加上就可以了，以此类推就证得了</p><p>其扩展形式为：</p><script type="math/tex; mode=display">\max_{k}(S)=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\min(T)\\\min_{k}(S)=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\max(T)</script><p>证明也是比较简单的，设 $s$ 为一个集合中最小的数，那么我们要去除一开始 $|T|=k$ 时冗余统计的集合</p><p>对于一个集合 $T$ 满足 $|T|=k$，我们为其添加一个大于等于 $s$ 的数，然后令这个集合为去除集合 $T$ 多余贡献的集合</p><p>对于任意 $k&gt;0$，我们发现 $\sum\limits_{i=0}^{k}(-1)^i\binom k i=0$，然后正确性就得到了证明</p><p>现在我们要明确的，就是对于任意的一个集合 $T$ 它应该被减或加多少次。不难发现只要不去除集合内的 $s$，那么任意去除一个集合都是合法的，所以其贡献是 $\binom{|T|-1}{|T|-k}=\binom{|T|-1}{k-1}$</p><p>而其在期望形式下也是成立的。网上大部分使用记号 $\mathbb E(\max(S))$，个人认为这种写法不是很严谨，这里我们用 $\mathbb E_{\max}[S]$ 代替它，它与 $\mathbb E[x]$ 是等价的，其中随机变量 $x$ 等于集合内所有随机变量最大值</p><p>于是就有：</p><script type="math/tex; mode=display">\begin{aligned}\mathbb E_{\max}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]\\\mathbb E_{\min}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\max}[T]\end{aligned}</script><p>我们来尝试证明一下：</p><script type="math/tex; mode=display">\begin{aligned}\mathbb E_{\max}[S]&=\sum_{\{P,U\}\to S}\prod p_i\max(U)\\&=\sum_{\{P,U\}\to S}\prod p_i\sum_{V\subseteq U}(-1)^{|V|-1}\min(V)\\&=\sum_{\{P,V\}\to T\subseteq S}(-1)^{|V|-1}\min(V)\prod p_i\\&=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]\end{aligned}</script><p>不是很难对吧？</p><p>其中记号 $\{P,U\}\to S$ 表示集合 $U$ 遍历 $S$ 中所有随机变量的所有可能取值组合，且 $p_i$ 等于（对应于） $x_i\in S$ 取 $u_i$ 的概率</p><p>$\prod p_i$ 直接被化到里面的原因显然（证明期望的线性性的时候也是这个原因，嘛不同的人有不同的证明方法，这里只是自言自语），不再赘述</p><p>类似的，在期望的形式下，其扩展形式为：</p><script type="math/tex; mode=display">\mathbb E_{\max}^k[S]=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\min}[T]\\\mathbb E_{\min}^k[S]=\sum_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\max}[T]</script><p>证明仿照一般形式证明即可，这里不再赘述</p><h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="LG-3175-按位或"><a href="#LG-3175-按位或" class="headerlink" title="LG. 3175 按位或"></a>LG. 3175 按位或</h3><p>首先设 $\mathbb E[x]$ 为 $x$ 的期望选中时间</p><p>很套路的，我们将这个问题按位拆开考虑。现在的问题就变成了求出 $\mathbb E_{\max}[S]$，其中 $S=\{2^1-1,\cdots,2^n-1\}$。选中每个数 $t$ 变成了选中一个集合 $T=\{2^{k_1-1},\cdots\}$，其中 $k_i$ 表示 $t$ 的这一位上为 $1$</p><p>然后把它用 min-max 容斥变成另外一个形式：</p><script type="math/tex; mode=display">\begin{aligned}\mathbb E_{\max}[S]=\sum_{T\subseteq S}(-1)^{|T|-1}\mathbb E_{\min}[T]\end{aligned}</script><p>现在的任务就变成了求出 $\mathbb E_{\min}[T]$，而这个期望式子的意义是，集合里第一个被选中的位出现的时间</p><p>这个概率服从几何分布，于是其期望就是 $\frac 1 p$，其中 $p$ 是被选中的概率，更具体的：</p><script type="math/tex; mode=display">\begin{aligned}p=\sum_{R\cap T\ne\emptyset}p_{R}\end{aligned}</script><p>我们对 $R$ 求出它的补集的子集和然后减一下就得到了这个结果，于是直接利用或卷积的正变换可以做到 $O(2^n)$</p><p>现在我们只要在碰到 $p=0$ 的时候输出无解就可以了，这就代表着所有这一位为 $1$ 的数被选中的概率都是 $0$</p><h3 id="LG-4707-重返现世"><a href="#LG-4707-重返现世" class="headerlink" title="LG. 4707 重返现世"></a>LG. 4707 重返现世</h3><p>首先我们发现 $\mathbb E_{\min}[S]$ 是好求的，于是我们令 $k=n-k+1$，现在的问题就变成了求第 $k$ 大</p><p>根据扩展形式的 min-max 容斥，我们很容易得到一个式子，直接计算这个式子是 $O(2^n)$ 的</p><p>不过我们可以设计一个 dp，令 $f_{i,j,k}$ 表示前 $i$ 个数选择了 $j$ 个，现在的概率分子之和为 $k$，那么我们就可以在 $O(n^2m)$ 的时间复杂度内求解</p><p>现在我们发现 $k$ 很小，考虑直接统计 $\sum\limits_{T\subseteq S}(-1)^{|T|-k}\binom{|T|-1}{k-1}\mathbb E_{\min}[T]$</p><p>不过根据 dp 过程，加入一个数是不好维护的，问题就出在我们无法快速维护 $\binom{|T|-1}{k-1}$ 和 $\mathbb E_{\min}[T]$</p><p>但是我们发现 $\mathbb E_{\min}[T]$ 在 $\sum p_i$ 固定的情况下取值是相同的，于是我们把它抛弃</p><p>然后根据 $\binom n k=\binom{n-1}k+\binom {n-1}{k-1}$，我们可以为 $k$ 单独开一维</p><p>设 $dp_{i,j,k}$ 为前 $i$ 个数，选择的数的概率分子之和为 $j$，$k$ 的定义同上</p><p>此时很显然的转移方程就是 $dp_{i,j,k}=dp_{i-1,j,k}+dp_{i-1,j-p_i,k-1}-dp_{i-1,j-p_i,k}$</p><p>初始值设为 $dp_{i,0,0}=1$，然后对第一维滚动一下即可</p><h3 id="LG-5643-随机游走"><a href="#LG-5643-随机游走" class="headerlink" title="LG. 5643 随机游走"></a>LG. 5643 随机游走</h3><p>首先 min-max 容斥一下，现在我们要求的便是 $\mathbb E_{\min}[S]$</p><p>设 $f_{i,S}$ 表示从点 $i$ 出发，第一次经过点集 $S$ 中的任意一点时的期望步数</p><p>那么设 $d_i$ 表示点 $i$ 的度数，显然有：</p><script type="math/tex; mode=display">f_{i,S}=\dfrac{1}{d_i}\left(f_{fa_i,S}+\sum_{v} f_{v,S}\right)+1</script><p>现在令 $f_{i,S}=k_if_{fa_i,S}+b_i$，那么就有：</p><script type="math/tex; mode=display">\begin{aligned}d_if_{i,S}&=f_{fa_i,S}+\sum_{v}k_vf_{i,S}+\sum_{v}b_i+d_i\\\left(d_i-\sum_{v}k_v\right)(k_if_{fa_i,S}+b_i)&=f_{fa_i,S}+\sum_{v}k_vf_{i,S}+\sum_{v}b_i+d_i\end{aligned}</script><p>令两边系数相等，那么就有：</p><script type="math/tex; mode=display">\begin{cases}k_i=\dfrac1{d_i-\sum\limits_{v}k_v}\\b_i=\dfrac{\sum\limits_{v}b_v+d_i}{d_i-\sum\limits_{v}k_v}\end{cases}</script><p>现在对于每一次询问我们要求的便是 $\sum_{T\subseteq S}(-1)^{|T|+1}f_{x,T}$，这是一个经典的子集和形式，预处理一下即可做到 $O(n2^n)$</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> min-max容斥 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>AGC 005</title>
+      <link href="/2022/07/01/AGC005/"/>
+      <url>/2022/07/01/AGC005/</url>
+      
+        <content type="html"><![CDATA[<h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>首先设 $1$ 为根结点，规定一个点集被统计的位置为深度最浅的那个点。那么很显然的就存在一个 dp</p><p>设 $f_{i,j}$ 为从 $i$ 结点的子树内选择 $j$ 个点的所有方案的连通块大小之和，规定这个连通块是要包括 $i$ 这个点的，无论这个点是否被选中</p><p>那么直接转移就是 $O(n^3)$ 的</p><p>现在将连通块拆开，固定一个 $f_i$，对于每个点 $u$ 求出其被包含的方案数即可。我们可以用所有的方案减掉不合法的方案，不难发现一个方案不合法当且仅当这个点集全部在 $u$ 的同一个子树中</p><p>设 $siz_{i,j}$ 为以 $i$ 为根结点的时候，第 $j$ 个子树的大小，再设 $cnt_i$ 为 $siz$ 数组中，值为 $i$ 的有多少个，那么：</p><script type="math/tex; mode=display">\begin{aligned}f_k&=\sum_{i=1}^n\left(\binom{n}{k}-\sum_{j}\binom{siz_{i,j}}{k}\right)\\&=n\binom{n}{k}-\sum_{i=k}^ncnt_i\binom{i}{k}\\&=n\binom{n}{k}-\dfrac1{k!}\sum_{i=k}^ncnt_i\dfrac{i!}{(i-k)!}\end{aligned}</script><p>现在设 $F_i=cnt_ii!$ 再设 $G_i=1/i!$，那么现在要求的就变成了 $\sum F_iG_{i-k}$</p><script type="math/tex; mode=display">\begin{aligned}\sum_{i=k}^nF_iG_{i-k}=\sum_{i=0}^{n-k}F_{i+k}G_i=\sum_{i=0}^{n-k}F^\prime_{n-k-i}G_i\end{aligned}</script><p>其中 $F^\prime$ 为 $F$ 反转之后的结果，直接 NTT 就是 $O(n\log n)$ 的</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Atcoder Grand Contest </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>AGC 004</title>
+      <link href="/2022/06/30/AGC004/"/>
+      <url>/2022/06/30/AGC004/</url>
+      
+        <content type="html"><![CDATA[<h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>尝试用两个互补的图形将给出的这个图案串起来就好了</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>简单问题啦</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>私以为应尽量将一件事物转化为另一件等价的易于理解的事物，然后对其进行分析</p><p>首先显然的，如果总点数为奇数，那么一定是无解的</p><p>然后非常套路的进行染色。发现如果能成功染色，树与偶环的情况一定至少存在一组解。这是因为如果有两个点没有被染成黑色，那么这两个点一定分属于二部图的两个不同的部分，它们之间的路径上的点数为偶数。于是我们将这条路径上的点（不包括两个端点）全部染成白色，最后将整个路径（包括两个端点）染成黑色即可</p><p>对于奇数环的情况，我们发现如果这张图的点数为偶数即有解。这是因为如果在奇环上任意选取两个点，那么这两个点之间一定存在一条路径上面的点数为偶数。于是对于没有染色的点将其操作到环上即可</p><p>现在我们仿照首段说的，将反转一条边的两个端点的颜色变成移动标记。对于一个经过了黑白染色的树，我们在黑色点上放置一个标记，而我们要做的就是将所有在黑色点上的标记移动到白色点上</p><p>以下的讨论黑白点均指黑白染色后的点</p><p>考虑一个点与它的子树，如果其内的黑白点的数量相差 $a$，那么显然其与父亲的这条边就一定会被经过至少 $a$ 次</p><p>而这个下界是显然容易得到的，因此树的情况我们就考虑完毕了</p><p>现在我们不妨将边权转化为点权，也即每个点的权值为其与父亲的连边的最少经过次数</p><p>如果出现了一个偶环，那么我们发现肯定有一些标记会从这条边经过“抄近道”</p><p>不妨设有 $x$ 个标记经过，那么对于这条边左边的部分的点权会 $-x$，右边会 $+x$。事实上我们实现的时候使用 dfs 是不会出现右边部分的，因此我们考虑最小化 $\sum a_i-x$。这是一个简单的问题，取 $x$ 为 $a$ 序列的中位数即可</p><p>如果出现了一个奇环，那么它的作用即是同时消除两个标记或同时增加两个标记。不难发现这条边操作 $|c_0-c_1|/2$ 次是最优的，其中 $c_0,c_1$ 分别表示黑白点的出现次数，因此我们可以在一开始就操作这条边然后删掉这条边，余下的按照树的情况处理即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Atcoder Grand Contest </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>AGC 002</title>
+      <link href="/2022/06/29/AGC002/"/>
+      <url>/2022/06/29/AGC002/</url>
+      
+        <content type="html"><![CDATA[<p>这场没啥好写的，但是不写会看起来不连贯，于是水一水</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>尝试使用整体二分做此题</p><p>二分编号的值域，对于每个连通块用并查集维护大小</p><p>因为需要撤销所以不能使用路径压缩，但事实上可以使用维护连通块大小的数组对其进行按秩合并</p><p>于是每次判断询问的两个点是否在同一个连通块里即可，如果是就统计一次，不是就把两个连通块大小加起来判断</p><h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>经典问题啦</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>简单问题啦</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Atcoder Grand Contest </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>AGC 003</title>
+      <link href="/2022/06/28/AGC003/"/>
+      <url>/2022/06/28/AGC003/</url>
+      
+        <content type="html"><![CDATA[<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>首先有一个非常自然的想法：将每个数看作一个点。对于一对数 $(a,b)$，如果它们的乘积为完全平方数，那么就在它们之间连一条边。要得到答案就对这张图求最大独立集即可</p><p>而在一般图上求最大独立集是 NPC 问题，因此这启发我们寻求一下这张图的性质</p><p>我们发现，对于任意长度为 $4$ 的链，其首尾两个结点一定存在边连接它们。并且对于一个数如果其想与另一个数相乘形成一个完全平方数，就要保证对于每一个相同的质因子 $p$，他们的指数之和相等</p><p>这就启发我们对于每一个数将其变成质因子分解后每个指数模 $3$ 之后的数</p><p>于是对于一些完全立方数，我们最多选取它们中的一个</p><p>现在剔除掉所有的完全立方数，并且考虑一个联通块，我们发现其一定可以表示成一条末端是菊花的链，此时我们发现对于一对有连边的不同的数 $(a,b)$，我们要么选取 $cnt_a$，要么选取 $cnt_b$</p><p>于是直接 pollard-rho 一下，或者筛 $\sqrt[3]{s_{max}}$ 即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Atcoder Grand Contest </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>AGC 006</title>
+      <link href="/2022/06/28/AGC006/"/>
+      <url>/2022/06/28/AGC006/</url>
+      
+        <content type="html"><![CDATA[<h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>首先一个兔子跳一下新的坐标应该有两种可能，假设连续的三只兔子 $r_1,r_2,r_3$ 的坐标分别是 $a,b,c$，$b$ 的新坐标一种是 $2a-b$，一种是 $2c-b$</p><p>那么跳完之后 $r_2$ 的坐标期望应该是 $\frac1 2\mathbb{E}[2r_1-r_2]+\frac 1 2 \mathbb E[2r_3-r_2]=\mathbb E[r_1]+\mathbb E[r_3]-\mathbb E[r_2]$</p><p>按照套路差分一下，发现每一次这样的操作就相当于交换差分数组的相邻两项</p><p>于是对置换快速幂即可，循环群总是交换群，所以怎么写都没有事</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>首先比较显然的是如果两个相同的挨在一起，那么它们上面的所有方格里面的数与这两个方格相同</p><p>称一组极大的连续相同方格为一个等价类（方格数量大于 $1$），那么相邻的两个等价类之间肯定都是 $01$ 交替</p><p>发现对于 $01$ 交替的这些格子，上面一层肯定与本层恰好相反</p><p>因此我们只需要二分答案，找到距离中心最近的那个等价类里面的数字，如果是 $1$ 说明当前二分的答案可以到达顶端</p><p>特判一下最下面一层没有等价类都是 $01$ 交替的情况就可以了</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>将题目转化为：如果 $(x,y),(y,z)$ 之间有边，那么我们可以在 $(z,x)$ 之间连一条边</p><p>我们不妨将一条边的意义看作“推出”，也就是说如果 $x\to y$，那么 $x$ 可以推出 $y$</p><p>现在我们尝试找到一个符合上述解释的定义：对于每一个点指定一个在 $0$ 到 $2$ 之间的编号 $x$，如果 $x\to y$，那么 $id_x+1\equiv id_y\pmod{3}$，称作点 $x$ 推出 $+1$ 后相等的 $y$</p><p>因为不同的连通块相互独立，以下我们默认讨论的都是一个连通块</p><p>现在假设一定有解，也就是说存在一种指定编号的方案满足所有的边的限制。我们可以得到一些结论：</p><ul><li>当任意一个点的编号被确定时，整张图的任意一个点的编号都会被唯一确定</li><li>确定编号后，按照给定规则连边，任意两个满足 $id_a+1\equiv id_d\pmod{3}$ 的点之间都会被连上边</li></ul><p>现在我们考虑如果添加一条边，使得不再有合法的方案会发生什么。也就是说存在一条边满足 $id_a=id_b$ 或 $id_a+2\equiv id_b\pmod{3}$。这里我们讨论第一种情况，第二种情况可以类似得出</p><p>根据上述结论，显而易见的，点 $b$ 可以推出任意 $+2$ 后相等的点，同时利用这些边还可以推出任意 $+0$ 后相等的点。也就是说点 $b$ 做到了包括 $a$ 在内的任意推出，于是 $a$ 也可以任意推出。整张图变成了完全图</p><p>如果没有这样的边，那么考虑最终的编号种数。如果少于 $3$ 种，那么我们肯定是无法操作的。如果等于三种，那么 $0\to1,1\to2,2\to 0$ 的推出按照规则连边之后都是存在的，于是将编号等于其的点的数量相乘即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Atcoder Grand Contest </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>浅入深出SG定理</title>
+      <link href="/2022/06/28/%E6%B5%85%E5%85%A5%E6%B7%B1%E5%87%BASG%E5%AE%9A%E7%90%86/"/>
+      <url>/2022/06/28/%E6%B5%85%E5%85%A5%E6%B7%B1%E5%87%BASG%E5%AE%9A%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>在一个公平游戏中，每个位置可以被表示成两个状态：N 状态与 P 状态。其中 N 状态表示接下来要执行操作的玩家获胜，P 状态表示先前执行操作的玩家获胜</p><p>定义 $*0$ 是一个 P 状态</p><p>两个状态 $G,G^\prime$ 能被视为等效的当且仅当任意状态 $H$ 被叠加到其上后它们的状态依然相同</p><p>形式的，$G\approx G^\prime$ 当且仅当 $\forall H,G+H$ 的状态与 $G^\prime+H$ 的状态相同</p><p>一个显然的结论是，对于任意状态 $G$，$G+G$ 总是一个 P 状态。因为后手可以通过模仿先手的行为到达 $*0$</p><h3 id="引理一"><a href="#引理一" class="headerlink" title="引理一"></a>引理一</h3><p>对于任意状态 $G$ 与任意 P 状态 $A$，有 $G\approx G+A$。也即 $\forall H,G+H\approx A+G+H$</p><p>如果 $G+H$ 是一个 P 状态，那么显然 $A+G+H$ 也是一个 P 状态</p><p>否则如果 $G+H$ 是一个 N 状态，那么 $A+P+H$ 也是一个 N 状态。这是因为后手总是可以找到一个在 $G+H$ 内的 P 状态，从而转化成上面讨论过的情况</p><h3 id="引理二"><a href="#引理二" class="headerlink" title="引理二"></a>引理二</h3><p>$G\approx G^\prime$ 当且仅当 $G+G^\prime$ 是一个 P 状态</p><p>首先我们尝试从 $G\approx G^\prime$ 推断出 $G+G^\prime$ 是一个 P 状态。事实上，根据等价关系的定义，$G+G\approx G+G^\prime$，于是就证得了</p><p>然后我们尝试根据 $G+G^\prime$ 是一个 P 状态推出 $G\approx G^\prime$。事实上，这也是非常简单的：$G+(G+G^\prime)\approx G$，去掉括号之后变成了一个 P 状态加 $G^\prime$，于是证得了</p><h3 id="SG定理的证明"><a href="#SG定理的证明" class="headerlink" title="SG定理的证明"></a>SG定理的证明</h3><p>对于一个状态 $G=\{G_1,G_2,\cdots,G_k\}$，如果令 $G^\prime=\{\ast n_1,\ast n_2,\cdots,\ast n_k\}$，那么我们将证明 $G\approx G^\prime$ 且 $G=\ast m$。其中 $m$ 是 $\text{mex}(G^\prime)$</p><p>首先我们来证明 $G\approx G^\prime$，如果 $k$ 是 $0$ 显然是正确的，否则我们将其组合起来得到 $G+G^\prime$，后手模仿先手动作可以必胜。因此 $G+G^\prime$ 是一个 P 状态，因此它们等价</p><p>现在我们证明 $G^\prime+\ast m$ 是一个 P 状态：如果后一个玩家在 $\ast m$ 中移动到 $m^\prime&lt;m$ 的 $\ast m^\prime$，那么先前的玩家一定可以将 $G^\prime$ 移动到 $\ast m^\prime$</p><p>否则如果后一个玩家在 $G^\prime$ 中移动到 $m^\prime&gt;m$，那么先手可以从 $\ast m^\prime$ 中移动到 $m^{\prime\prime}=m$ 的 $\ast m^{\prime\prime}$。如果后手移动到 $m^\prime&lt;m$ 的 $\ast m^\prime$ 是与上一种情况类似的</p><p>因此 $G^\prime \approx \ast m$，整个定理也就证得了</p><p>例题没有，本来就没打算写</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> SG定理 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>AGC 001</title>
       <link href="/2022/06/27/AGC001/"/>
       <url>/2022/06/27/AGC001/</url>
       
-        <content type="html"><![CDATA[<h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul><li>因为言论自由，本条被强制撤下了！</li></ul><h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><p>真的有必要写吗</p><h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>让其先反射两次，发现现在要求的就变成了：从一个平行四边形的一个顶点出发，光线反射规则与原问题相同，求光线经过的轨迹长度</p><p>再让其反射两次，发现对答案的贡献是两倍的短边的长度，且问题变成了原问题缩短长边后的相同问题</p><p>发现这个过程其实就是在求 GCD，于是只需要讨论平行四边形长边等于短边时的答案</p><p>发现对于一个边长为 $n$ 的菱形，对答案的贡献就是 $n$</p><p>于是对于一个长边长度为 $x$，短边长度为 $y$ 的平行四边形，光线的长度是 $2(x+y)-3\gcd(x,y)$</p><p>于是原问题的答案就是 $3(n-\gcd(n,x))$</p><h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>考虑固定两个端点时，我们只需要对这条路径上的每个点统计到这个点距离不超过这个点到两个直径端点的距离的最小值的点的个数就可以了</p><p>发现对于这种情况，对于每个点统计的东西都是有明确范围的</p><p>这种做法的复杂度是 $O(n^3)$，于是想到只枚举一个端点。但此时如果统计到这个点距离不超过 $k$ 的点的个数，那么我们无法保证这个点是直径的端点</p><p>但是不难想到直径的性质，于是我们枚举直径的中心即可，复杂度 $O(n^2)$</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>我们不妨将每个位置看作一个点，一条边就表示着这条边的两个端点所表示的字符相等。于是如果两条边能相互到达，就表示这两个点所表示的字符相同</p><p>在这样的情况下，每一个回文串就相当于连一些边，或者说一些限制。为了讨论方便，我们不妨设有两排点 $A,B$ 分别表示 $a$ 序列的限制和 $b$ 序列的限制</p><p>在一开始，我们应当在 $a_i$ 与 $b_i$ 之间连一条边，因为他们表示的是同一个位置</p><p>我们发现，如果 $a_i$ 是一个奇数，那么这个回文串的中心是不会有限制的，此时如果向让这个位置与其他位置相等，就必须在 $b$ 中建立一个对这个点的限制</p><p>如果我们称极大的，能相互到达的点集为一个等价类的话，那么这个等价类的形态只有两种：一条线或是一个环</p><p>因此这就说明了 $A$ 中不能存在多于 $2$ 个奇数</p><p>我们知道，对于一个回文串如果删掉一个字符或是增加一个字符，那么形成的新的串不可能是回文串（增删前后这个串不同的字符数量大于 $1$）</p><p>然后很显然的，不存在 border 为 $1$ 的偶回文串（不同字符数量大于 $1$）</p><p>因此我们直接基于这个思路构造，将奇数放两边，$b_1$ 设为 $a_1-1$，后面顺次移位，最后的一个数加 $1$ 即可</p><p>边界特判</p><h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>经典问题</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>首先我们发现如果连续的交换一些数（例如 $a+2$ 与 $a+1$ 换，$a+1$ 与 $a$ 换……），那么产生的效果就是顺次移位</p><p>因此根据套路直接考虑逆排列，发现此时 $a$ 与 $b$ 可以交换的条件变成了 $|a-b|\ge k$ 并且需要这两个数相邻</p><p>此时我们需要的是一个字典序最小的排列，那么如果 $b-a\ge k$ 事实上我们也不会交换的</p><p>因此现在问题就变成了给定一组序列与一些限制，被限制的一对数相邻时不能交换，求能得到的最小字典序排列</p><p>显然对于有限制的一对数，只要不改变他们的相对位置，那么最后形成的排列就一定是合法的</p><p>发现与冒泡排序很相似，直接归并排序就是 $O(n\log n)$，这个思路被题解区的某巨抢先了</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="今日热搜榜"><a href="#今日热搜榜" class="headerlink" title="今日热搜榜"></a>今日热搜榜</h2><ul><li>因为言论自由，本条被强制撤下了！</li></ul><h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><p>真的有必要写吗</p><h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>让其先反射两次，发现现在要求的就变成了：从一个平行四边形的一个顶点出发，光线反射规则与原问题相同，求光线经过的轨迹长度</p><p>再让其反射两次，发现对答案的贡献是两倍的短边的长度，且问题变成了原问题缩短长边后的相同问题</p><p>发现这个过程其实就是在求 GCD，于是只需要讨论平行四边形长边等于短边时的答案</p><p>发现对于一个边长为 $n$ 的菱形，对答案的贡献就是 $n$</p><p>于是对于一个长边长度为 $x$，短边长度为 $y$ 的平行四边形，光线的长度是 $2(x+y)-3\gcd(x,y)$</p><p>于是原问题的答案就是 $3(n-\gcd(n,x))$</p><h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>考虑固定两个端点时，我们只需要对这条路径上的每个点统计到这个点距离不超过这个点到两个直径端点的距离的最小值的点的个数就可以了</p><p>发现对于这种情况，对于每个点统计的东西都是有明确范围的</p><p>这种做法的复杂度是 $O(n^3)$，于是想到只枚举一个端点。但此时如果统计到这个点距离不超过 $k$ 的点的个数，那么我们无法保证这个点是直径的端点</p><p>但是不难想到直径的性质，于是我们枚举直径的中心即可，复杂度 $O(n^2)$</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>我们不妨将每个位置看作一个点，一条边就表示着这条边的两个端点所表示的字符相等。于是如果两条边能相互到达，就表示这两个点所表示的字符相同</p><p>在这样的情况下，每一个回文串就相当于连一些边，或者说一些限制。为了讨论方便，我们不妨设有两排点 $A,B$ 分别表示 $a$ 序列的限制和 $b$ 序列的限制</p><p>在一开始，我们应当在 $a_i$ 与 $b_i$ 之间连一条边，因为他们表示的是同一个位置</p><p>我们发现，如果 $a_i$ 是一个奇数，那么这个回文串的中心是不会有限制的，此时如果向让这个位置与其他位置相等，就必须在 $b$ 中建立一个对这个点的限制</p><p>如果我们称极大的，能相互到达的点集为一个等价类的话，那么这个等价类的形态只有两种：一条线或是一个环</p><p>因此这就说明了 $A$ 中不能存在多于 $2$ 个奇数</p><p>我们知道，对于一个回文串如果删掉一个字符或是增加一个字符，那么形成的新的串不可能是回文串（增删前后这个串不同的字符数量大于 $1$）</p><p>然后很显然的，不存在 border 为 $1$ 的偶回文串（不同字符数量大于 $1$）</p><p>因此我们直接基于这个思路构造，将奇数放两边，$b_1$ 设为 $a_1-1$，后面顺次移位，最后的一个数加 $1$ 即可</p><p>边界特判</p><h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>经典问题啦</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>首先我们发现如果连续的交换一些数（例如 $a+2$ 与 $a+1$ 换，$a+1$ 与 $a$ 换……），那么产生的效果就是顺次移位</p><p>因此根据套路直接考虑逆排列，发现此时 $a$ 与 $b$ 可以交换的条件变成了 $|a-b|\ge k$ 并且需要这两个数相邻</p><p>此时我们需要的是一个字典序最小的排列，那么如果 $b-a\ge k$ 事实上我们也不会交换的</p><p>因此现在问题就变成了给定一组序列与一些限制，被限制的一对数相邻时不能交换，求能得到的最小字典序排列</p><p>显然对于有限制的一对数，只要不改变他们的相对位置，那么最后形成的排列就一定是合法的</p><p>发现与冒泡排序很相似，直接归并排序就是 $O(n\log n)$，这个思路被题解区的某巨抢先了</p>]]></content>
       
       
       <categories>
