@@ -217,7 +217,7 @@ h6 {
   font-size: 0.875em;
 }
 p {
-  margin: 0 0 20px 0;
+  margin: 0 0 15px 0;
 }
 a,
 span.exturl {
@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #c238b8;
+  background: #ffc;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1726,6 +1726,17 @@ pre .javascript .function {
 .post-body h5:hover .header-anchor,
 .post-body h6:hover .header-anchor {
   visibility: visible;
+}
+.post-body blockquote {
+  border: 2px dashed;
+  border-color: #afd9ff;
+  background: #e7ffff;
+  padding-left: 30px;
+  padding-top: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 .post-body iframe,
 .post-body img,
