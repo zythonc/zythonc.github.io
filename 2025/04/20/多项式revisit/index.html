@@ -212,7 +212,7 @@
 <p>以下用无下标的代表模 <span class="math inline">\(x^{2n}\)</span> 意义下，带下标 <span class="math inline">\(0\)</span> 的代表模 <span class="math inline">\(x^n\)</span> 意义下</p>
 <p>用 <span class="math inline">\(\textsf E(n)\)</span> 表示一次长度为 <span class="math inline">\(n\)</span> 的 FFT 所需时间，例如两个精度为 <span class="math inline">\(n\)</span> 的多项式相乘需要 <span class="math inline">\(6\textsf E(n)\)</span></p>
 <h1 id="求逆与除法">求逆与除法</h1>
-<p>即 <span class="math inline">\(h=f/g\)</span>，直接做需要对 <span class="math inline">\(g\)</span> 求长 <span class="math inline">\(2n\)</span> 的逆，已经达到了 <span class="math inline">\(24\textsf{E}(n)\)</span>，重新审视递推式：</p>
+<p>即 <span class="math inline">\(h\equiv f/g\)</span>，直接做需要对 <span class="math inline">\(g\)</span> 求长 <span class="math inline">\(2n\)</span> 的逆，已经达到了 <span class="math inline">\(24\textsf{E}(n)\)</span>，重新审视递推式：</p>
 <p><span class="math display">\[
 \begin{aligned}
 h-h_0&amp;\equiv 0&amp;\pmod{x^n}
@@ -234,7 +234,7 @@ h&amp;\equiv h_0-\left(\dfrac{g}{f}h_0^2-h_0\right) &amp;\pmod{x^{2n}}
 \end{aligned}
 \]</span></p>
 <p>而 <span class="math inline">\({\rm ord}(1-(g/f)h_0)\geq n\)</span>，因此 <span class="math inline">\(\Delta_1\)</span> 不会做任何贡献</p>
-<p><span class="math inline">\(f_0/f\)</span> 的后 <span class="math inline">\(n\)</span> 项也会参与贡献，不妨令 <span class="math inline">\(f_0/f=1+\Delta_2\)</span>，<span class="math inline">\(f_1\)</span> 代表 <span class="math inline">\(f-f_0\)</span>：</p>
+<p><span class="math inline">\(f_0/f\)</span> 的后 <span class="math inline">\(n\)</span> 项也会参与贡献，不妨令 <span class="math inline">\(f_0/f\equiv 1+\Delta_2\)</span>，<span class="math inline">\(f_1\)</span> 代表 <span class="math inline">\(f-f_0\)</span>：</p>
 <p><span class="math display">\[
 \begin{cases}
 (f_0+f_1)\dfrac{1}{f}\equiv 1
@@ -242,7 +242,7 @@ h&amp;\equiv h_0-\left(\dfrac{g}{f}h_0^2-h_0\right) &amp;\pmod{x^{2n}}
 \dfrac{f_0}{f}\equiv 1+\Delta_2
 \end{cases}
 \quad \Rightarrow\quad 
-\Delta_2=-\dfrac{f_1}{f}
+\Delta_2\equiv-\dfrac{f_1}{f}
 \]</span></p>
 <p><span class="math display">\[
 \dfrac{f_0}{f}gh_0 -f_0\equiv gh_0-f_0-\dfrac{f_1}{f}gh_0
@@ -260,7 +260,7 @@ h\equiv h_0-(gh_0-f)\dfrac{1}{g_0} \pmod{x^{2n}}
 <p>在倒数的计算过程中，<span class="math inline">\(h_0\)</span> 和 <span class="math inline">\(1/g_0 \pmod{x^{n}}\)</span> 是一回事，于是我们不再需要计算 <span class="math inline">\(h_0\)</span>，同时每次迭代完成后求出的就是 <span class="math inline">\(1/g_0\pmod{x^{n}}\)</span>，因此从模 <span class="math inline">\(x^n\)</span> 到模 <span class="math inline">\(2^n\)</span> 我们仅需要 <span class="math inline">\(12\textsf{E}(n)\)</span></p>
 <p>但是求逆我们需要从模 <span class="math inline">\(x^2\)</span> 开始迭代，于是总时间依然是 <span class="math inline">\(12\textsf{E}(n)\)</span></p>
 <h1 id="exp">exp</h1>
-<p>求 <span class="math inline">\(F\)</span> 满足 <span class="math inline">\(G\circ F= 0\)</span> 我们想让 <span class="math inline">\(\sum a_n(F-F_0)^n\)</span> 贡献出 <span class="math inline">\(G\circ F\)</span>，那就将其在 <span class="math inline">\(F_0\)</span> 处泰勒展开，考虑到 <span class="math inline">\({\rm ord}(F-F_0)\geq n\)</span>，那么 <span class="math inline">\((F-F_0)\)</span> 在平方项中就已经不可能向 <span class="math inline">\(F\)</span> 贡献，即：</p>
+<p>求 <span class="math inline">\(F\)</span> 满足 <span class="math inline">\(G\circ F\equiv 0\)</span> 我们想让 <span class="math inline">\(\sum a_n(F-F_0)^n\)</span> 贡献出 <span class="math inline">\(G\circ F\)</span>，那就将其在 <span class="math inline">\(F_0\)</span> 处泰勒展开，考虑到 <span class="math inline">\({\rm ord}(F-F_0)\geq n\)</span>，那么 <span class="math inline">\((F-F_0)\)</span> 在平方项中就已经不可能向 <span class="math inline">\(F\)</span> 贡献，即：</p>
 <p><span class="math display">\[
 \begin{aligned}
 &amp;G\circ F\equiv G\circ F_0+(G^\prime \circ F_0)(F-F_0)\equiv 0
